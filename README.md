@@ -65,19 +65,22 @@ Personalmorpheme.
 >
 > **Bis einschließlich Lektion 12 sind jedoch alle Vokabeln in irgendeiner Form
 > enthalten.**
+>
+> Grammatikfragen sind derzeit noch nicht in Lektionen unterteilt, sollten
+> dies in Zukunft aber sein.
 
-- [ ] I. Lectio Prima
-- [ ] II. Lectio Secunda
-- [ ] III. Lectio Tertia
-- [ ] IV. Lectio Quarta
-- [ ] V. Lectio Quinta
-- [ ] VI. Lectio Sexta
-- [ ] VII. Lectio Septima
-- [ ] VIII. Lectio Octava
-- [ ] IX. Lectio Nona
-- [ ] X. Lectio Decima
-- [ ] XI. Lectio Unodecima
-- [ ] XII. Lectio Duodecima
+- [x] I. Lectio Prima
+- [x] II. Lectio Secunda
+- [ ] III. Lectio Tertia (enthalten, noch nicht migriert)
+- [ ] IV. Lectio Quarta (enthalten, noch nicht migriert)
+- [ ] V. Lectio Quinta (enthalten, noch nicht migriert)
+- [ ] VI. Lectio Sexta (enthalten, noch nicht migriert)
+- [ ] VII. Lectio Septima (enthalten, noch nicht migriert)
+- [ ] VIII. Lectio Octava (enthalten, noch nicht migriert)
+- [ ] IX. Lectio Nona (enthalten, noch nicht migriert)
+- [ ] X. Lectio Decima (enthalten, noch nicht migriert)
+- [ ] XI. Lectio Unodecima (enthalten, noch nicht migriert)
+- [ ] XII. Lectio Duodecima (enthalten, noch nicht migriert)
 - [ ] XIII. Lectio Tertia Decima
 - [ ] XIV. Lectio Quarta Decima
 - [ ] XV. Lectio Quinta Decima
