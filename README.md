@@ -168,6 +168,13 @@ Informationen.
 
 Alternativ kann auch ein Issue mit den Änderungen als Freitext eröffnet werden.
 
+## Bekannte Probleme
+
+- Die native Anki-Suchfunktion unterscheidet zwischen Symbolen mit und ohne
+  Diakritika. D.h. <tt>a</tt> und <tt>ā</tt> sind zwei distinkte Zeichen. Beim
+  Suchen kann dies kontraintuitiv sein, wenn <tt>advoco</tt> <tt>advocō</tt>
+  nicht findet.
+
 ## Lizenz
 
 Eigenständige Beiträge zu diesem Anki-Deck, einschließlich selbst verfasster
