@@ -11,7 +11,8 @@ und besonders deren ausgewählte Bedeutungen entscheidend.
 
 1. Letzte Version der `.akpg`-Datei unter
    [*Releases*](https://github.com/lsg551/anki-wege-zu-cicero/releases)
-   herunterladen.
+   oder [`anki-wege-zu-cicero.apkg`](https://github.com/lsg551/anki-wege-zu-cicero/blob/main/anki-wege-zu-cicero.apkg)
+   direkt (vom <tt>main</tt>-Branch) herunterladen.
 2. Anki öffnen: `Import File` > `.akpg`-Datei auswählen.
 3. Medien und Deck-Presets als Optionen beim Import inkludieren.
 
