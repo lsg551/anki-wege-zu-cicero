@@ -53,8 +53,9 @@ Die Anki-Karteikarten enthalten neben den Vokabeln der einzelnen Lektionen auch
 Beispiele, Eselsbrücken (z.B. Lehnwörter) oder andere Angaben. Die Karteikarten
 sind dabei wie im Buch nach Lektionen gegliedert.
 
-Einige spezielle Sub-Decks behandeln Grammatikfragen oder üben Flexions- oder
-Personalmorpheme.
+Jede Lektion enthält dabei auch die für sie relevanten Grammatikfragen.
+
+Einige spezielle Sub-Decks behandeln Flexions- oder Personalmorpheme etc.
 
 #### Lektionen
 
@@ -67,8 +68,6 @@ Personalmorpheme.
 > **Bis einschließlich Lektion 12 sind jedoch alle Vokabeln in irgendeiner Form
 > enthalten.**
 >
-> Grammatikfragen sind derzeit noch nicht in Lektionen unterteilt, sollten
-> dies in Zukunft aber sein.
 
 - [x] I. Lectio Prima
 - [x] II. Lectio Secunda
