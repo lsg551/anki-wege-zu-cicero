@@ -154,15 +154,34 @@ def test_diff_against_dump_writes_output(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     def fake_run(command: list[str]) -> subprocess.CompletedProcess[str]:
-        return subprocess.CompletedProcess(command, 1, "out", "err")
+        out = "--- dump\n+++ /tmp/issue.apkg\n@@ -1 +1 @@\n-a\n+b\n"
+        return subprocess.CompletedProcess(command, 1, out, "err")
 
     monkeypatch.setattr(issue_deck, "run", fake_run)
     diff = tmp_path / "diff.txt"
     error = tmp_path / "error.txt"
     code = issue_deck.diff_against_dump(tmp_path / "x.apkg", diff, error)
     assert code == 1
-    assert diff.read_text() == "out"
+    assert "--- Repository" in diff.read_text()
+    assert "+++ Vorschlag" in diff.read_text()
+    assert "/tmp/issue.apkg" not in diff.read_text()
     assert error.read_text() == "err"
+
+
+def test_relabel_diff_plain() -> None:
+    text = "--- dump\n+++ /home/runner/x.apkg\n@@ -1 +1 @@\n-a\n+b\n"
+    out = issue_deck._relabel_diff(text)
+    assert "--- Repository" in out
+    assert "+++ Vorschlag" in out
+    assert "/home/runner" not in out
+    assert "-a" in out
+
+
+def test_relabel_diff_fenced() -> None:
+    text = "```diff\n--- dump\n+++ /tmp/x\n@@\n```\n"
+    out = issue_deck._relabel_diff(text)
+    assert "--- Repository" in out
+    assert "/tmp/x" not in out
 
 
 def test_render_comment_mentions_bot() -> None:
@@ -326,6 +345,42 @@ def test_report_apply(monkeypatch: pytest.MonkeyPatch) -> None:
     )
     assert issue_deck.APPLY_MARKER in captured["body"]
     assert "https://pr/1" in captured["body"]
+
+
+def test_upsert_comment_creates(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[str] = []
+
+    def fake(command: list[str]) -> subprocess.CompletedProcess[str]:
+        calls.append(" ".join(command))
+        if "--paginate" in command:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        return subprocess.CompletedProcess(command, 0, "https://c/1", "")
+
+    monkeypatch.setattr(issue_deck, "run", fake)
+    url = issue_deck._upsert_comment("o/r", 7, "<!-- m -->", "body")
+    assert url == "https://c/1"
+    assert any("/issues/7/comments" in call for call in calls)
+    assert not any("/issues/comments/7" in call for call in calls)
+
+
+def test_upsert_comment_raises_on_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fake(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "--paginate" in command:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        return subprocess.CompletedProcess(command, 1, "", "boom")
+
+    monkeypatch.setattr(issue_deck, "run", fake)
+    with pytest.raises(issue_deck.IssueError):
+        issue_deck._upsert_comment("o/r", 7, "<!-- m -->", "body")
+
+
+def test_comment_ids_raises_on_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fake(command: list[str]) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(command, 1, "", "boom")
+
+    monkeypatch.setattr(issue_deck, "run", fake)
+    with pytest.raises(issue_deck.IssueError):
+        issue_deck._comment_ids("o/r", 7, "<!-- m -->")
 
 
 def test_parse_diff_without_url(tmp_path: Path) -> None:

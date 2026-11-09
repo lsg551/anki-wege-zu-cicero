@@ -97,7 +97,7 @@ def diff_against_dump(apkg: Path, diff: Path, error: Path) -> int:
     result = run(
         ["anki-tools", "diff", "dump", str(apkg), "--with-deck-configs", "--no-media"]
     )
-    diff.write_text(result.stdout)
+    diff.write_text(_relabel_diff(result.stdout))
     error.write_text(result.stderr)
     return result.returncode
 
@@ -293,6 +293,8 @@ def _comment_ids(repo: str, issue: int, marker: str) -> list[str]:
             f'.[] | select(.body | contains("{marker}")) | .id',
         ]
     )
+    if result.returncode != 0:
+        raise IssueError(result.stderr.strip() or "could not list comments")
     return result.stdout.split()
 
 
@@ -319,15 +321,29 @@ def _upsert_comment(repo: str, issue: int, marker: str, body: str) -> str:
             command = [
                 "gh",
                 "api",
-                f"repos/{repo}/issues/comments/{issue}",
+                f"repos/{repo}/issues/{issue}/comments",
                 "-F",
                 f"body=@{path}",
                 "--jq",
                 ".html_url",
             ]
-        return run(command).stdout.strip()
+        result = run(command)
+        if result.returncode != 0:
+            raise IssueError(result.stderr.strip() or "could not post the comment")
+        return result.stdout.strip()
     finally:
         path.unlink(missing_ok=True)
+
+
+def _relabel_diff(text: str) -> str:
+    """Replace a unified diff header's input paths with stable labels."""
+    lines = text.splitlines(keepends=True)
+    for index in range(len(lines) - 1):
+        if lines[index].startswith("--- ") and lines[index + 1].startswith("+++ "):
+            lines[index] = "--- Repository\n"
+            lines[index + 1] = "+++ Vorschlag\n"
+            break
+    return "".join(lines)
 
 
 def parse_apply(body: str, workdir: Path, issue: int) -> bool:
@@ -369,7 +385,9 @@ def parse_apply(body: str, workdir: Path, issue: int) -> bool:
     result = run(["anki-tools", "diff", "dump", str(dump), "-f", "markdown"])
     if result.returncode == 2:
         raise IssueError(result.stderr.strip() or "anki-tools diff failed")
-    (workdir / "pr-body.md").write_text(render_pr_body(issue, result.stdout))
+    (workdir / "pr-body.md").write_text(
+        render_pr_body(issue, _relabel_diff(result.stdout))
+    )
     return result.returncode == 1
 
 
