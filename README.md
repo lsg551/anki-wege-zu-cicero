@@ -1,5 +1,8 @@
 # Wege zu Cicero – Per Aspera ad Astra
 
+[![CI](https://github.com/lsg551/anki-wege-zu-cicero/actions/workflows/ci.yml/badge.svg)](https://github.com/lsg551/anki-wege-zu-cicero/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/lsg551/anki-wege-zu-cicero)](https://github.com/lsg551/anki-wege-zu-cicero/releases)
+
 Anki-Karteikarten zum Lehrbuch und Kurs ***Wege zu Ciceo. Per Aspera ad Astra.**
 Intensivkurs für Studierende zur Vorbereitung auf die Cicerolektüre*.
 
