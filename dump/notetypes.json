@@ -1,5 +1,440 @@
 [
   {
+    "name": "Deklinationsklasse",
+    "kind": 0,
+    "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n\n.deck-name {\n\t\tmargin-top: 2em;\n\t\tfont-size: 10px;\n}",
+    "sort_field": "Name",
+    "fields": [
+      {
+        "name": "Name",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Eigenschaften",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Erkennungsmerkmale",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "[Sg] Nominativ",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "[Pl] Nominativ",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "[Sg] Genitiv",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "[Pl] Genitiv",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "[Sg] Dativ",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "[Pl] Dativ",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "[Sg] Akkusativ",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "[Pl] Akkusativ",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "[Sg] Ablativ",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "[Pl] Ablativ",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Farbe",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Details",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      }
+    ],
+    "templates": [
+      {
+        "name": "Eigenschaften",
+        "qfmt": "Welche Wörter gehören typischerweise zur <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{Eigenschaften}}\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Name}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Erkennungsmerkmale",
+        "qfmt": "Wie erkennt man Wörter der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{Erkennungsmerkmale}}\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}\n",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Singular alle",
+        "qfmt": "Wie lauten die Endungen im Singular der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\nNom: <i>{{[Sg] Nominativ}}</i><br>\nGen: <i>{{[Sg] Genitiv}}</i><br>\nDat: <i>{{[Sg] Dativ}}</i><br>\nAkk: <i>{{[Sg] Akkusativ}}</i><br>\nAbl: <i>{{[Sg] Ablativ}}</i><br<\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Plural alle",
+        "qfmt": "Wie lauten die Endungen im Plural der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\nNom: <i>{{[Pl] Nominativ}}</i><br>\nGen: <i>{{[Pl] Genitiv}}</i><br>\nDat: <i>{{[Pl] Dativ}}</i><br>\nAkk: <i>{{[Pl] Akkusativ}}</i><br>\nAbl: <i>{{[Pl] Ablativ}}</i><br<\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Nominativ",
+        "qfmt": "Wie lauten die Endungen im Nominativ der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{[Sg] Nominativ}}, {{[Pl] Nominativ}} \n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Genitiv",
+        "qfmt": "Wie lauten die Endungen im Genitiv der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{[Sg] Genitiv}}, {{[Pl] Genitiv}} \n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Dativ",
+        "qfmt": "Wie lauten die Endungen im Dativ der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{[Sg] Dativ}}, {{[Pl] Dativ}} \n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Akkusativ",
+        "qfmt": "Wie lauten die Endungen im Akkusativ der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{[Sg] Akkusativ}}, {{[Pl] Akkusativ}} \n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Ablativ",
+        "qfmt": "Wie lauten die Endungen im Ablativ der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{[Sg] Ablativ}}, {{[Pl] Ablativ}} \n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Sg. Nom. erfragen",
+        "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Sg] Nominativ}}</i>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Sg] Nominativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Pl. Nom. erfragen",
+        "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Pl] Nominativ}}</i>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Pl] Nominativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Sg. Gen. erfragen",
+        "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Sg] Genitiv}}</i>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Sg] Genitiv}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Pl. Gen. erfragen",
+        "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Pl] Genitiv}}</i>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Pl] Genitiv}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Sg. Dat. erfragen",
+        "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Sg] Dativ}}</i>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Sg] Dativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Pl. Dat. erfragen",
+        "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Pl] Dativ}}</i>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Pl] Dativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Sg. Akk. erfragen",
+        "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Sg] Akkusativ}}</i>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Sg] Akkusativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Pl. Akk. erfragen",
+        "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Pl] Akkusativ}}</i>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Pl] Akkusativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Sg. Abl. erfragen",
+        "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Sg] Ablativ}}</i>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Sg] Ablativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Pl. Abl. erfragen",
+        "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Pl] Ablativ}}</i>?\n",
+        "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Pl] Ablativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      }
+    ],
+    "latex_pre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
+    "latex_post": "\\end{document}",
+    "options": {
+      "latexsvg": false,
+      "originalStockKind": 1
+    }
+  },
+  {
     "name": "Frage-Antwort",
     "kind": 0,
     "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n\n.deck-name {\n\t\tmargin-top: 2em;\n\t\tfont-size: 10px;\n}",
@@ -57,6 +492,89 @@
           "bafmt": "",
           "bfont": "",
           "bqfmt": "{{Frage}}",
+          "bsize": 0
+        }
+      }
+    ],
+    "latex_pre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
+    "latex_post": "\\end{document}",
+    "options": {
+      "latexsvg": false,
+      "originalStockKind": 1
+    }
+  },
+  {
+    "name": "Vokabeln (Standard)",
+    "kind": 0,
+    "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
+    "sort_field": "Lexem",
+    "fields": [
+      {
+        "name": "Lexem",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Lexikalische Kategorie",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Bedeutung",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Details",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      }
+    ],
+    "templates": [
+      {
+        "name": "Card 1",
+        "qfmt": "{{Lexem}}\n\n{{#Lexikalische Kategorie}}\n<p style=\"font-size:10pt;\">\n({{Lexikalische Kategorie}})\n</p>\n{{/Lexikalische Kategorie}}",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Lexem}}",
           "bsize": 0
         }
       }
@@ -219,7 +737,7 @@
     "sort_field": "Präsens 1.Sg. Ind.Akt.",
     "fields": [
       {
-        "name": "Präsens 1.Sg. Ind.Akt.",
+        "name": "Infinitiv Präsens Akt.",
         "options": {
           "description": "",
           "excludeFromSearch": false,
@@ -233,7 +751,7 @@
         }
       },
       {
-        "name": "Infinitiv Präsens Akt.",
+        "name": "Präsens 1.Sg. Ind.Akt.",
         "options": {
           "description": "",
           "excludeFromSearch": false,
@@ -636,89 +1154,6 @@
           "bafmt": "",
           "bfont": "",
           "bqfmt": "{{Infinitiv}}",
-          "bsize": 0
-        }
-      }
-    ],
-    "latex_pre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
-    "latex_post": "\\end{document}",
-    "options": {
-      "latexsvg": false,
-      "originalStockKind": 1
-    }
-  },
-  {
-    "name": "Vokabeln (unidirektional)",
-    "kind": 0,
-    "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
-    "sort_field": "Lexem",
-    "fields": [
-      {
-        "name": "Lexem",
-        "options": {
-          "description": "",
-          "excludeFromSearch": false,
-          "font": "Arial",
-          "plainText": false,
-          "preventDeletion": false,
-          "rtl": false,
-          "size": 20,
-          "sticky": false,
-          "tag": null
-        }
-      },
-      {
-        "name": "Lexikalische Kategorie",
-        "options": {
-          "description": "",
-          "excludeFromSearch": false,
-          "font": "Arial",
-          "plainText": false,
-          "preventDeletion": false,
-          "rtl": false,
-          "size": 20,
-          "sticky": false,
-          "tag": null
-        }
-      },
-      {
-        "name": "Bedeutung",
-        "options": {
-          "description": "",
-          "excludeFromSearch": false,
-          "font": "Arial",
-          "plainText": false,
-          "preventDeletion": false,
-          "rtl": false,
-          "size": 20,
-          "sticky": false,
-          "tag": null
-        }
-      },
-      {
-        "name": "Details",
-        "options": {
-          "description": "",
-          "excludeFromSearch": false,
-          "font": "Arial",
-          "plainText": false,
-          "preventDeletion": false,
-          "rtl": false,
-          "size": 20,
-          "sticky": false,
-          "tag": null
-        }
-      }
-    ],
-    "templates": [
-      {
-        "name": "Card 1",
-        "qfmt": "{{Lexem}}\n\n{{#Lexikalische Kategorie}}\n<p style=\"font-size:10pt;\">\n({{Lexikalische Kategorie}})\n</p>\n{{/Lexikalische Kategorie}}",
-        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
-        "options": {
-          "bafmt": "",
-          "bfont": "",
-          "bqfmt": "{{Lexem}}",
           "bsize": 0
         }
       }
