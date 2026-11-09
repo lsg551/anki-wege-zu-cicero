@@ -1,0 +1,127 @@
+name: Apply a deck change from an issue
+
+# A maintainer comments "/apply" on an issue that carries an .apkg. The parse
+# job (no write token) turns the package into a dump and a package; the pr job
+# (write token) only copies those files, commits them, and opens a pull
+# request. The write job never runs the anki parser on untrusted input.
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+
+jobs:
+  parse:
+    if: >
+      github.event.issue.pull_request == null &&
+      github.event.comment.body == '/apply' &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association) &&
+      contains(github.event.issue.body || '', '.apkg')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      changed: ${{ steps.changes.outputs.changed }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - name: Download the attached package
+        env:
+          BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+          url=$(printf '%s' "$BODY" \
+            | grep -oE 'https?://[^ )"]+' \
+            | grep -E 'user-attachments|\.apkg' \
+            | head -n 1 || true)
+          if [ -z "$url" ]; then
+            echo "no .apkg link found in the issue body" >&2
+            exit 1
+          fi
+          curl -fsSL "$url" -o "$RUNNER_TEMP/issue.apkg"
+          test -s "$RUNNER_TEMP/issue.apkg"
+      - name: Turn the package into a dump and a package
+        id: changes
+        run: |
+          set -euo pipefail
+          change="$RUNNER_TEMP/change"
+          mkdir -p "$change"
+          uv run anki-tools dump "$RUNNER_TEMP/issue.apkg" -o "$change/dump" \
+            --with-deck-configs --no-media
+          uv run anki-tools build "$change/dump" -o "$change/deck.apkg"
+          set +e
+          uv run anki-tools diff dump "$change/dump" -f markdown > "$change/pr-diff.md"
+          code=$?
+          set -e
+          if [ "$code" -eq 2 ]; then
+            echo "the dump could not be compared" >&2
+            exit 1
+          fi
+          echo "changed=$([ "$code" -eq 1 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: deck-change
+          retention-days: 3
+          path: ${{ runner.temp }}/change
+
+  pr:
+    needs: parse
+    if: needs.parse.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: deck-change
+          path: ${{ runner.temp }}/change
+      - name: Open a pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          set -euo pipefail
+          dumpdir=$(dirname "$(find "$RUNNER_TEMP/change" -name meta.json -print -quit)")
+          apkg=$(find "$RUNNER_TEMP/change" -name '*.apkg' -print -quit)
+          prdiff=$(find "$RUNNER_TEMP/change" -name pr-diff.md -print -quit)
+
+          branch="deck/issue-$ISSUE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          rm -rf dump
+          cp -r "$dumpdir" dump
+          cp "$apkg" anki-wege-zu-cicero.apkg
+          git add dump anki-wege-zu-cicero.apkg
+          git commit -m "Deck: Änderungen aus #$ISSUE"
+          git push --force -u origin "$branch"
+
+          {
+            echo "Übernimmt die an #$ISSUE angehängte \`.apkg\`-Datei."
+            echo
+            echo "Closes #$ISSUE"
+            echo
+            echo '<details><summary>Änderungen</summary>'
+            echo
+            if [ "$(wc -c < "$prdiff")" -gt 60000 ]; then
+              head -c 60000 "$prdiff"
+              echo
+              echo '... gekürzt.'
+            else
+              cat "$prdiff"
+            fi
+            echo
+            echo '</details>'
+          } > "$RUNNER_TEMP/pr-body.md"
+
+          title="Deck: Änderungen aus #$ISSUE"
+          if gh pr view "$branch" > /dev/null 2>&1; then
+            gh pr edit "$branch" --body-file "$RUNNER_TEMP/pr-body.md"
+          else
+            gh pr create --base main --head "$branch" \
+              --title "$title" --body-file "$RUNNER_TEMP/pr-body.md"
+          fi

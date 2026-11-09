@@ -1,0 +1,42 @@
+name: Änderung oder Korrektur vorschlagen
+description: Schlage eine Korrektur oder Ergänzung für das Deck vor
+title: "[Änderung] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke, dass du hilfst! Exportiere bitte zuerst dein Deck aus Anki und
+        hänge die Datei unten an.
+
+        1. In Anki das Deck **Latein** anklicken.
+        2. Auf das Zahnrad klicken: **Export**.
+        3. Diese Einstellungen übernehmen:
+           - *Export format*: `Anki Deck Package (.apkg)`
+           - *Include*: `Latein`
+           - Option **Include deck presets** einschalten (Medien sind optional).
+        4. Auf **Export…** klicken.
+        5. Die entstandene `.apkg`-Datei unten in das Feld **Exportierte Datei**
+           ziehen (Drag & Drop).
+  - type: textarea
+    id: beschreibung
+    attributes:
+      label: Was hast du geändert?
+      description: Beschreibe kurz die Korrekturen oder Ergänzungen.
+      placeholder: z.B. "Bedeutung von advocō korrigiert"
+    validations:
+      required: true
+  - type: textarea
+    id: datei
+    attributes:
+      label: Exportierte .apkg-Datei
+      description: Ziehe die exportierte Datei hier hinein (Drag & Drop).
+      placeholder: Datei hier ablegen
+    validations:
+      required: true
+  - type: checkboxes
+    id: export
+    attributes:
+      label: Export
+      options:
+        - label: Ich habe das Deck als `.apkg` exportiert und die Datei angehängt.
+          required: true

@@ -1,0 +1,31 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - "**"
+    tags-ignore:
+      - "**"
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - name: Build a package from the dump
+        run: uv run anki-tools build dump -o "$RUNNER_TEMP/built.apkg"
+      - name: Build reproduces the dump
+        run: uv run anki-tools diff dump "$RUNNER_TEMP/built.apkg" --with-deck-configs --no-media
+      - name: Committed package matches the dump
+        run: uv run anki-tools diff dump anki-wege-zu-cicero.apkg --with-deck-configs --no-media

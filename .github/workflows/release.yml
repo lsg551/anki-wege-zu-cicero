@@ -1,0 +1,31 @@
+name: Release
+
+# Date-based tags, e.g. 2026.10.22 or 2026.10.22.1. Create and sign them by hand.
+on:
+  push:
+    tags:
+      - "[0-9]*"
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  draft:
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      - name: Build the release package
+        run: uv run anki-tools build dump -o "dist/anki-wege-zu-cicero-${{ github.ref_name }}.apkg"
+      - name: Create a draft release
+        run: gh release create "$GITHUB_REF_NAME" --draft --generate-notes dist/*
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
