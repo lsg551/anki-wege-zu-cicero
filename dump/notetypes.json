@@ -1,0 +1,733 @@
+[
+  {
+    "name": "Frage-Antwort",
+    "kind": 0,
+    "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n\n.deck-name {\n\t\tmargin-top: 2em;\n\t\tfont-size: 10px;\n}",
+    "sort_field": "Frage",
+    "fields": [
+      {
+        "name": "Frage",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Antwort",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Details",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      }
+    ],
+    "templates": [
+      {
+        "name": "Card 1",
+        "qfmt": "{{Frage}}\n\n<div class=\"deck-name\">\n\t{{Deck}}\n</div>",
+        "afmt": "<div style=\"text-align: start;\">\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div style=\"text-align: start;\">\n<b>Antwort</b>: <br/><br/>\n{{Antwort}}\n</div>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Frage}}",
+          "bsize": 0
+        }
+      }
+    ],
+    "latex_pre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
+    "latex_post": "\\end{document}",
+    "options": {
+      "latexsvg": false,
+      "originalStockKind": 1
+    }
+  },
+  {
+    "name": "Vokabeln (Substantiv)",
+    "kind": 0,
+    "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
+    "sort_field": "Nominativ Sg",
+    "fields": [
+      {
+        "name": "Nominativ Sg",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Genitiv Sg",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Genus",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Deklinationsklasse",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Bedeutung",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Details",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      }
+    ],
+    "templates": [
+      {
+        "name": "Bedeutung erfragen",
+        "qfmt": "Was bedeutet <i>{{Nominativ Sg}}, {{Genitiv Sg}}</i> ({{Genus}})?",
+        "afmt": "{{FrontSide}}\n\n<hr/>\n\n{{Bedeutung}}\n\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Nominativ Sg}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Genus erfragen",
+        "qfmt": "Welches Genus ist <i>{{Nominativ Sg}}, {{Genitiv Sg}}</i>?",
+        "afmt": "{{FrontSide}}\n\n<hr/>\n\n{{Genus}}\n",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Deklinationsklasse erfragen",
+        "qfmt": "Zu welcher Deklinationsklasse gehört <i>{{Nominativ Sg}}, {{Genitiv Sg}}</i> ({{Genus}})?",
+        "afmt": "{{FrontSide}}\n\n<hr/>\n\n{{Deklinationsklasse}}\n",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Genitiv erfragen",
+        "qfmt": "Wie lautet der Genitiv Sg. zu <i>{{Nominativ Sg}}}</i> ({{Genus}})?",
+        "afmt": "{{FrontSide}}\n\n<hr/>\n\n<i>{{Genitiv Sg}}</i>\n\n<br><br>\n\n{{Deklinationsklasse}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "",
+          "bsize": 0
+        }
+      }
+    ],
+    "latex_pre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
+    "latex_post": "\\end{document}",
+    "options": {
+      "latexsvg": false,
+      "originalStockKind": 1
+    }
+  },
+  {
+    "name": "Vokabeln (Verb)",
+    "kind": 0,
+    "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
+    "sort_field": "Präsens 1.Sg. Ind.Akt.",
+    "fields": [
+      {
+        "name": "Präsens 1.Sg. Ind.Akt.",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Infinitiv Präsens Akt.",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Perfekt 1.Sg. Ind.Akt.",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "PPP (Supinum)",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Konjugationsklasse",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Bedeutung",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Details",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      }
+    ],
+    "templates": [
+      {
+        "name": "Lexikoneintrag",
+        "qfmt": "Was bedeutet das Verb?<br>\n\n<i>\n{{Präsens 1.Sg. Ind.Akt.}},\n{{Infinitiv Präsens Akt.}},\n{{Perfekt 1.Sg. Ind.Akt.}},\n{{PPP (Supinum)}}\n</i>",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Präsens 1.Sg. Ind.Akt.}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Konjugationsklasse",
+        "qfmt": "Welche Konjugationsklasse hat das Verb?<br>\n\n<i>\n{{Präsens 1.Sg. Ind.Akt.}},\n{{Infinitiv Präsens Akt.}},\n{{Perfekt 1.Sg. Ind.Akt.}},\n{{PPP (Supinum)}}\n</i>",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<b>{{Konjugationsklasse}}</b>\n\n<div class=\"muted\">\n{{Bedeutung}}\n</div>\n\n<style>\ndiv.muted {\n  margin-top: 15px;\n\tfont-size: 1rem;\n}\n</style>\n",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Präsens 1.Sg. Ind.Akt.}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Nur Infinitiv",
+        "qfmt": "Was bedeutet das Verb? Welche Form hat es?<br>\n\n<i>\n{{Infinitiv Präsens Akt.}}\n</i>",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n<br>\n<div>\nForm: <i>Infinitiv</i>\n</div>",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Präsens 1.Sg. Ind.Akt.}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Nur Präsens",
+        "qfmt": "Was bedeutet das Verb? Welche Form hat es?<br>\n\n<i>\n{{Präsens 1.Sg. Ind.Akt.}}\n</i>",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n<br>\n<div>\nForm: <i>Präsens 1.Sg. Ind.Akt.</i>\n</div>",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Präsens 1.Sg. Ind.Akt.}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Nur Perfekt",
+        "qfmt": "Was bedeutet das Verb? Welche Form hat es?<br>\n\n<i>\n{{Perfekt 1.Sg. Ind.Akt.}}\n</i>",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n<br>\n<div>\nForm: <i>Perfekt 1.Sg. Ind.Akt.</i>\n</div>",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Präsens 1.Sg. Ind.Akt.}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Nur PPP",
+        "qfmt": "Was bedeutet das Verb? Welche Form hat es?<br>\n\n<i>\n{{PPP (Supinum)}}\n</i>",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n<br>\n<div>\nForm: <i>Supinum (~PPP)</i>\n</div>",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Präsens 1.Sg. Ind.Akt.}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Lexioneintrag aufzählen",
+        "qfmt": "Wie lautet der Lexioneintrag zu folgendem Infinitiv?<br>\n\n<i>{{Infinitiv Präsens Akt.}}</i>",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n<br>\n<div>\n<ul>\n<li>Infinitiv: <i>{{Infinitiv Präsens Akt.}}</i></li>\n<li>Präsens: <i>{{Präsens 1.Sg. Ind.Akt.}}</i></li>\n<li>Perfekt: <i>{{Perfekt 1.Sg. Ind.Akt.}}</i></li>\n<li>PPP: <i>{{PPP (Supinum)}}</i></li>\n</ul>\n\nJeweils 1. Sg. Indikativ Aktiv\n</div>",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Präsens 1.Sg. Ind.Akt.}}",
+          "bsize": 0
+        }
+      }
+    ],
+    "latex_pre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
+    "latex_post": "\\end{document}",
+    "options": {
+      "latexsvg": false,
+      "originalStockKind": 1
+    }
+  },
+  {
+    "name": "Vokabeln (Verb, unregelmäßig)",
+    "kind": 0,
+    "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
+    "sort_field": "Infinitiv",
+    "fields": [
+      {
+        "name": "Infinitiv",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Zeitform",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "1.Sg",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "2.Sg",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "3.Sg",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "1.Pl",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "2.Pl",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "3.Pl",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Bedeutung",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Details",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      }
+    ],
+    "templates": [
+      {
+        "name": "Infinitiv / Bedeutung",
+        "qfmt": "Was bedeutet das Verb?\n<br>\n\n<i>{{Infinitiv}}</i>",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Infinitiv}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "Alle Formen",
+        "qfmt": "Wie lauten die Formen von <b><i>{{Infinitiv}}</i></b> im <i>{{Zeitform}}</i>?",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Infinitiv}} ~ {{Bedeutung}}\n</div>\n\n<br>\n<table>\n\t<tr>\n\t\t<td></td>\n\t\t<td>Sg.</td>\n\t\t<td>Pl.</td>\n  </tr>\n\t<tr>\n\t\t<td>1.</td>\n\t\t<td>{{1.Sg}}</td>\n\t\t<td>{{1.Pl}}</td>\n\t</tr>\n\t<tr>\n\t\t<td>2.</td>\n\t\t<td>{{2.Sg}}</td>\n\t\t<td>{{2.Pl}}</td>\n\t</tr>\n\t<tr>\n\t\t<td>3.</td>\n\t\t<td>{{3.Sg}}</td>\n\t\t<td>{{3.Pl}}</td>\n\t</tr>\n</table>\n\n<style>\ntable, tr, td {\n\tborder: 1px solid;\n\tborder-collapse: collapse;\n\tpadding: 5px;\n}\n</style>",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Infinitiv}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "1.Sg",
+        "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{1.Sg}}</i></b>?",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>1.Sg</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Infinitiv}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "2.Sg",
+        "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{2.Sg}}</i></b>?",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>2.Sg</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Infinitiv}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "3.Sg",
+        "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{3.Sg}}</i></b>?",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>3.Sg</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Infinitiv}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "1.Pl",
+        "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{1.Pl}}</i></b>?",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>1.Pl</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Infinitiv}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "2.Pl",
+        "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{2.Pl}}</i></b>?",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>2.Pl</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Infinitiv}}",
+          "bsize": 0
+        }
+      },
+      {
+        "name": "3.Pl",
+        "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{3.Pl}}</i></b>?",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>3.Pl</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Infinitiv}}",
+          "bsize": 0
+        }
+      }
+    ],
+    "latex_pre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
+    "latex_post": "\\end{document}",
+    "options": {
+      "latexsvg": false,
+      "originalStockKind": 1
+    }
+  },
+  {
+    "name": "Vokabeln (unidirektional)",
+    "kind": 0,
+    "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
+    "sort_field": "Lexem",
+    "fields": [
+      {
+        "name": "Lexem",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Lexikalische Kategorie",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Bedeutung",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      },
+      {
+        "name": "Details",
+        "options": {
+          "description": "",
+          "excludeFromSearch": false,
+          "font": "Arial",
+          "plainText": false,
+          "preventDeletion": false,
+          "rtl": false,
+          "size": 20,
+          "sticky": false,
+          "tag": null
+        }
+      }
+    ],
+    "templates": [
+      {
+        "name": "Card 1",
+        "qfmt": "{{Lexem}}\n\n{{#Lexikalische Kategorie}}\n<p style=\"font-size:10pt;\">\n({{Lexikalische Kategorie}})\n</p>\n{{/Lexikalische Kategorie}}",
+        "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
+        "options": {
+          "bafmt": "",
+          "bfont": "",
+          "bqfmt": "{{Lexem}}",
+          "bsize": 0
+        }
+      }
+    ],
+    "latex_pre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
+    "latex_post": "\\end{document}",
+    "options": {
+      "latexsvg": false,
+      "originalStockKind": 1
+    }
+  }
+]

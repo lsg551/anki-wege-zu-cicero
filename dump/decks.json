@@ -1,0 +1,121 @@
+[
+  {
+    "name": "Latein",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::01. Lectio Prima",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::02. Lectio Secunda",
+    "config": "Default",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::03. Lectio Tertia",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::04. Lectio Quarta",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::05. Lectio Quinta",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::06. Lectio Sexta",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::07. Lectio Septima",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::08. Lectio Octava",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::09. Lectio Nona",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::10. Lectio Decima",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::11. Lectio Unodecima",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::12. Lectio Duodecima",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::Flexion",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::Flexion::Infinitive",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::Flexion::Tempora",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  },
+  {
+    "name": "Latein::Flexion::e-Deklination",
+    "config": "Sprachenlernen",
+    "options": {
+      "desc": ""
+    }
+  }
+]

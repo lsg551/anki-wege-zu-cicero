@@ -1,0 +1,9 @@
+{
+  "format": "anki-tools-dump",
+  "version": 1,
+  "export_options": {
+    "query": "",
+    "with_deck_configs": true,
+    "with_media": false
+  }
+}
