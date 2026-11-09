@@ -1,8 +1,9 @@
 name: Deck diff from issue
 
-# When an issue carries an .apkg, dump it and comment the diff against dump/.
-# The parse job parses untrusted input and holds no write token; the comment
-# job only posts text produced by the parse job.
+# When an issue carries an .apkg (renamed to .zip, which GitHub accepts), the
+# parse job compares it with dump/ and writes the comment body; the comment job
+# only posts that text. The parse job handles untrusted input and holds no write
+# token. The branches live in scripts/issue_deck.py, which is unit tested.
 on:
   issues:
     types: [opened, edited]
@@ -16,36 +17,25 @@ concurrency:
 
 jobs:
   parse:
-    if: contains(github.event.issue.body || '', '.apkg')
+    if: >-
+      contains(github.event.issue.body || '', 'user-attachments') ||
+      contains(github.event.issue.body || '', '.zip') ||
+      contains(github.event.issue.body || '', '.apkg')
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
-      - name: Download the attached package
+      - name: Compare the attachment with the dump
         env:
           BODY: ${{ github.event.issue.body }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           set -euo pipefail
-          url=$(printf '%s' "$BODY" \
-            | grep -oE 'https?://[^ )"]+' \
-            | grep -E 'user-attachments|\.apkg' \
-            | head -n 1 || true)
-          if [ -z "$url" ]; then
-            echo "no .apkg link found in the issue body" >&2
-            exit 1
-          fi
-          curl -fsSL "$url" -o "$RUNNER_TEMP/issue.apkg"
-          test -s "$RUNNER_TEMP/issue.apkg"
-      - name: Diff the package against the dump
-        run: |
-          set +e
-          uv run anki-tools diff dump "$RUNNER_TEMP/issue.apkg" \
-            --with-deck-configs --no-media \
-            > "$RUNNER_TEMP/diff.txt" 2> "$RUNNER_TEMP/error.txt"
-          echo "$?" > "$RUNNER_TEMP/code.txt"
-          set -e
+          printf '%s' "$BODY" > "$RUNNER_TEMP/body.txt"
+          uv run python scripts/issue_deck.py parse-diff \
+            "$RUNNER_TEMP/body.txt" "$RUNNER_TEMP" "$RUN_URL"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: deck-diff
@@ -54,6 +44,7 @@ jobs:
             ${{ runner.temp }}/diff.txt
             ${{ runner.temp }}/error.txt
             ${{ runner.temp }}/code.txt
+            ${{ runner.temp }}/body.md
 
   comment:
     needs: parse
@@ -70,51 +61,16 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           ISSUE: ${{ github.event.issue.number }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           set -euo pipefail
-          code=$(cat "$(find . -name code.txt -print -quit)")
-          diff=$(find . -name diff.txt -print -quit)
-          err=$(find . -name error.txt -print -quit)
-          {
-            echo '<!-- anki-tools-diff -->'
-            echo '### Deck-Vorschlag'
-            echo
-            case "$code" in
-              0)
-                echo 'Der angehängte Export ist inhaltsgleich mit <code>dump/</code> (keine Änderungen).'
-                ;;
-              1)
-                echo '<details><summary>Änderungen gegenüber <code>dump/</code></summary>'
-                echo
-                echo '```diff'
-                if [ "$(wc -c < "$diff")" -gt 60000 ]; then
-                  head -c 60000 "$diff"
-                  echo
-                  echo "... gekürzt, vollständiger Diff: $RUN_URL"
-                else
-                  cat "$diff"
-                fi
-                echo '```'
-                echo
-                echo '</details>'
-                ;;
-              *)
-                echo 'Der Export konnte nicht verglichen werden:'
-                echo
-                echo '```'
-                head -c 4000 "$err"
-                echo '```'
-                ;;
-            esac
-          } > body.md
-
-          # Update the previous bot comment if there is one, else create it.
+          body=$(find . -name body.md -print -quit)
           id=$(gh api "repos/$REPO/issues/$ISSUE/comments" --paginate \
             --jq '.[] | select(.body | contains("<!-- anki-tools-diff -->")) | .id' \
-            | head -n 1)
+            | head -n 1 || true)
           if [ -n "$id" ]; then
-            gh api -X PATCH "repos/$REPO/issues/comments/$id" -F body=@body.md > /dev/null
+            gh api -X PATCH "repos/$REPO/issues/comments/$id" \
+              -F "body=@$body" > /dev/null
           else
-            gh api "repos/$REPO/issues/$ISSUE/comments" -F body=@body.md > /dev/null
+            gh api "repos/$REPO/issues/$ISSUE/comments" \
+              -F "body=@$body" > /dev/null
           fi

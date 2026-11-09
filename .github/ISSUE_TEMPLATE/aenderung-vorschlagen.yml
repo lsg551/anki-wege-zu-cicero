@@ -15,8 +15,11 @@ body:
            - *Include*: `Latein`
            - Option **Include deck presets** einschalten (Medien sind optional).
         4. Auf **Export…** klicken.
-        5. Die entstandene `.apkg`-Datei unten in das Feld **Exportierte Datei**
-           ziehen (Drag & Drop).
+        5. Die Datei umbenennen, sodass sie zusätzlich auf `.zip` endet:
+           `anki-wege-zu-cicero.apkg` → `anki-wege-zu-cicero.apkg.zip`.
+           (GitHub akzeptiert keine `.apkg`-Dateien.)
+        6. Die umbenannte Datei unten in das Feld **Exportierte Datei** ziehen
+           (Drag & Drop).
   - type: textarea
     id: beschreibung
     attributes:
@@ -28,8 +31,8 @@ body:
   - type: textarea
     id: datei
     attributes:
-      label: Exportierte .apkg-Datei
-      description: Ziehe die exportierte Datei hier hinein (Drag & Drop).
+      label: Exportierte Datei (.zip)
+      description: Ziehe die in `.zip` umbenannte Datei hier hinein (Drag & Drop).
       placeholder: Datei hier ablegen
     validations:
       required: true
@@ -38,5 +41,5 @@ body:
     attributes:
       label: Export
       options:
-        - label: Ich habe das Deck als `.apkg` exportiert und die Datei angehängt.
+        - label: Ich habe die exportierte Datei auf `.zip` umbenannt und angehängt.
           required: true

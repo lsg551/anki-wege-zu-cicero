@@ -1,10 +1,11 @@
 name: Apply a deck change from an issue
 
-# A maintainer comments "/apply" on an issue that carries an .apkg. The parse
-# job (no write token) turns the package into a dump and a package; the pr job
-# (write token) only copies those files, commits them, and opens a pull
-# request. The write job never runs the anki parser on untrusted input.
-
+# A maintainer comments "/apply" on an issue that carries an .apkg (renamed to
+# .zip, which GitHub accepts). The parse job (no write token) turns the package
+# into a dump and a package and writes the pull request body; the pr job (write
+# token) only copies those files, commits them, and opens a pull request. The
+# write job never runs the anki parser on untrusted input. The branches live in
+# scripts/issue_deck.py, which is unit tested.
 on:
   issue_comment:
     types: [created]
@@ -18,48 +19,28 @@ jobs:
       github.event.issue.pull_request == null &&
       github.event.comment.body == '/apply' &&
       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association) &&
-      contains(github.event.issue.body || '', '.apkg')
+      (contains(github.event.issue.body || '', 'user-attachments') ||
+       contains(github.event.issue.body || '', '.zip') ||
+       contains(github.event.issue.body || '', '.apkg'))
     runs-on: ubuntu-latest
     permissions:
       contents: read
     outputs:
-      changed: ${{ steps.changes.outputs.changed }}
+      changed: ${{ steps.parse.outputs.changed }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
-      - name: Download the attached package
+      - name: Turn the attachment into a dump
+        id: parse
         env:
           BODY: ${{ github.event.issue.body }}
+          ISSUE: ${{ github.event.issue.number }}
         run: |
           set -euo pipefail
-          url=$(printf '%s' "$BODY" \
-            | grep -oE 'https?://[^ )"]+' \
-            | grep -E 'user-attachments|\.apkg' \
-            | head -n 1 || true)
-          if [ -z "$url" ]; then
-            echo "no .apkg link found in the issue body" >&2
-            exit 1
-          fi
-          curl -fsSL "$url" -o "$RUNNER_TEMP/issue.apkg"
-          test -s "$RUNNER_TEMP/issue.apkg"
-      - name: Turn the package into a dump and a package
-        id: changes
-        run: |
-          set -euo pipefail
-          change="$RUNNER_TEMP/change"
-          mkdir -p "$change"
-          uv run anki-tools dump "$RUNNER_TEMP/issue.apkg" -o "$change/dump" \
-            --with-deck-configs --no-media
-          uv run anki-tools build "$change/dump" -o "$change/deck.apkg"
-          set +e
-          uv run anki-tools diff dump "$change/dump" -f markdown > "$change/pr-diff.md"
-          code=$?
-          set -e
-          if [ "$code" -eq 2 ]; then
-            echo "the dump could not be compared" >&2
-            exit 1
-          fi
-          echo "changed=$([ "$code" -eq 1 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          printf '%s' "$BODY" > "$RUNNER_TEMP/body.txt"
+          changed=$(uv run python scripts/issue_deck.py parse-apply \
+            "$RUNNER_TEMP/body.txt" "$RUNNER_TEMP/change" "$ISSUE")
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: deck-change
@@ -86,8 +67,8 @@ jobs:
         run: |
           set -euo pipefail
           dumpdir=$(dirname "$(find "$RUNNER_TEMP/change" -name meta.json -print -quit)")
-          apkg=$(find "$RUNNER_TEMP/change" -name '*.apkg' -print -quit)
-          prdiff=$(find "$RUNNER_TEMP/change" -name pr-diff.md -print -quit)
+          apkg=$(find "$RUNNER_TEMP/change" -name deck.apkg -print -quit)
+          prbody=$(find "$RUNNER_TEMP/change" -name pr-body.md -print -quit)
 
           branch="deck/issue-$ISSUE"
           git config user.name "github-actions[bot]"
@@ -100,28 +81,10 @@ jobs:
           git commit -m "Deck: Änderungen aus #$ISSUE"
           git push --force -u origin "$branch"
 
-          {
-            echo "Übernimmt die an #$ISSUE angehängte \`.apkg\`-Datei."
-            echo
-            echo "Closes #$ISSUE"
-            echo
-            echo '<details><summary>Änderungen</summary>'
-            echo
-            if [ "$(wc -c < "$prdiff")" -gt 60000 ]; then
-              head -c 60000 "$prdiff"
-              echo
-              echo '... gekürzt.'
-            else
-              cat "$prdiff"
-            fi
-            echo
-            echo '</details>'
-          } > "$RUNNER_TEMP/pr-body.md"
-
           title="Deck: Änderungen aus #$ISSUE"
           if gh pr view "$branch" > /dev/null 2>&1; then
-            gh pr edit "$branch" --body-file "$RUNNER_TEMP/pr-body.md"
+            gh pr edit "$branch" --body-file "$prbody"
           else
             gh pr create --base main --head "$branch" \
-              --title "$title" --body-file "$RUNNER_TEMP/pr-body.md"
+              --title "$title" --body-file "$prbody"
           fi
