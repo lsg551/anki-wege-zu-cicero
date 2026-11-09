@@ -1,9 +1,10 @@
 name: Deck diff from issue
 
 # When an issue carries an .apkg (renamed to .zip, which GitHub accepts), the
-# parse job compares it with dump/ and writes the comment body; the comment job
-# only posts that text. The parse job handles untrusted input and holds no write
-# token. The branches live in scripts/issue_deck.py, which is unit tested.
+# ack job says the bot is working, the parse job compares it with dump/, and
+# the comment job edits the ack into the result. The parse job handles
+# untrusted input and holds no write token. The branches live in
+# scripts/issue_deck.py, which is unit tested.
 on:
   issues:
     types: [opened, edited]
@@ -16,6 +17,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  ack:
+    if: >-
+      github.event.action == 'opened' &&
+      (contains(github.event.issue.body || '', 'user-attachments') ||
+       contains(github.event.issue.body || '', '.zip') ||
+       contains(github.event.issue.body || '', '.apkg'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Comment that the bot is working
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          set -euo pipefail
+          python3 scripts/issue_deck.py ack > "$RUNNER_TEMP/ack.md"
+          gh issue comment "$ISSUE" --body-file "$RUNNER_TEMP/ack.md"
+
   parse:
     if: >-
       contains(github.event.issue.body || '', 'user-attachments') ||
@@ -30,29 +52,30 @@ jobs:
       - name: Compare the attachment with the dump
         env:
           BODY: ${{ github.event.issue.body }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           set -euo pipefail
           printf '%s' "$BODY" > "$RUNNER_TEMP/body.txt"
           uv run python scripts/issue_deck.py parse-diff \
-            "$RUNNER_TEMP/body.txt" "$RUNNER_TEMP" "$RUN_URL"
+            "$RUNNER_TEMP/body.txt" "$RUNNER_TEMP"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: deck-diff
-          retention-days: 3
+          retention-days: 45
           path: |
             ${{ runner.temp }}/diff.txt
             ${{ runner.temp }}/error.txt
             ${{ runner.temp }}/code.txt
-            ${{ runner.temp }}/body.md
 
   comment:
     needs: parse
     if: needs.parse.result == 'success'
     runs-on: ubuntu-latest
     permissions:
+      actions: read
+      contents: read
       issues: write
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: deck-diff
@@ -61,16 +84,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           ISSUE: ${{ github.event.issue.number }}
+          RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
-          body=$(find . -name body.md -print -quit)
-          id=$(gh api "repos/$REPO/issues/$ISSUE/comments" --paginate \
-            --jq '.[] | select(.body | contains("<!-- anki-tools-diff -->")) | .id' \
-            | head -n 1 || true)
-          if [ -n "$id" ]; then
-            gh api -X PATCH "repos/$REPO/issues/comments/$id" \
-              -F "body=@$body" > /dev/null
-          else
-            gh api "repos/$REPO/issues/$ISSUE/comments" \
-              -F "body=@$body" > /dev/null
-          fi
+          code=$(cat "$(find . -name code.txt -print -quit)")
+          diff=$(find . -name diff.txt -print -quit)
+          err=$(find . -name error.txt -print -quit)
+          python3 scripts/issue_deck.py post \
+            "$code" "$diff" "$err" "$ISSUE" "$REPO" "$RUN_ID"

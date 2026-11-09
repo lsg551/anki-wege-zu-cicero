@@ -38,9 +38,8 @@ def test_real_diff_matches_committed_dump(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(issue_deck, "fetch_attachment", _fetch_from_package(PACKAGE))
-    issue_deck.parse_diff("https://user-attachments/x", tmp_path, "http://run")
+    issue_deck.parse_diff("https://user-attachments/x", tmp_path)
     assert (tmp_path / "code.txt").read_text().strip() == "0"
-    assert "inhaltsgleich" in (tmp_path / "body.md").read_text()
 
 
 def test_real_apply_detects_no_change(

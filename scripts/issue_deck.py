@@ -12,6 +12,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import urllib.request
 import zipfile
 from io import BytesIO
@@ -20,6 +21,13 @@ from typing import cast
 
 MARKER = "<!-- anki-tools-diff -->"
 DIFF_LIMIT = 60_000
+
+BOT_NOTE = (
+    "> [!NOTE]\n"
+    "> 🤖 Diese Antwort wurde automatisch erstellt. Ich bin ein Bot und kann\n"
+    "> keine Fragen beantworten. Ein Maintainer prüft deinen Vorschlag und\n"
+    "> meldet sich."
+)
 
 _URL_RE = re.compile(r"https?://[^\s)]+")
 _ATTACHMENT_SUFFIX_RE = re.compile(r"\.(?:apkg|zip)$", re.IGNORECASE)
@@ -93,29 +101,35 @@ def diff_against_dump(apkg: Path, diff: Path, error: Path) -> int:
     return result.returncode
 
 
-def render_comment(code: int, diff: str, error: str, run_url: str) -> str:
+def render_comment(
+    code: int, diff: str, error: str, full_url: str | None = None
+) -> str:
     """Return the issue comment body for a comparison result."""
-    lines = [MARKER, "### Deck-Vorschlag", ""]
+    lines = [MARKER, BOT_NOTE, "", "### Deck-Vorschlag", ""]
     if code == 0:
         lines.append(
             "Der angehängte Export ist inhaltsgleich mit <code>dump/</code> "
             "(keine Änderungen)."
         )
     elif code == 1:
+        truncated = len(diff) > DIFF_LIMIT
         lines += [
             "<details><summary>Änderungen gegenüber <code>dump/</code></summary>",
             "",
             "```diff",
+            (diff[:DIFF_LIMIT] if truncated else diff).rstrip("\n"),
+            "```",
+            "",
+            "</details>",
         ]
-        if len(diff) > DIFF_LIMIT:
-            lines += [
-                diff[:DIFF_LIMIT],
-                "",
-                f"... gekürzt, vollständiger Diff: {run_url}",
-            ]
-        else:
-            lines.append(diff.rstrip("\n"))
-        lines += ["```", "", "</details>"]
+        if truncated:
+            lines.append("")
+            if full_url is not None:
+                lines.append(
+                    f"Der Diff ist gekürzt. [Vollständiger Diff als Datei]({full_url})"
+                )
+            else:
+                lines.append("Der Diff ist gekürzt.")
     else:
         lines += [
             "Der Export konnte nicht gelesen werden:",
@@ -128,6 +142,17 @@ def render_comment(code: int, diff: str, error: str, run_url: str) -> str:
             "umbenennen und erneut anhängen.",
         ]
     return "\n".join(lines) + "\n"
+
+
+def render_ack() -> str:
+    """Return the comment posted while the comparison runs."""
+    note = (
+        "> [!NOTE]\n"
+        "> 🤖 Danke für deinen Vorschlag. Ich bin ein Bot und vergleiche deine\n"
+        "> Datei gerade mit dem Deck im Repository. Das dauert etwa eine\n"
+        "> Minute. Danach meldet sich ein Maintainer."
+    )
+    return f"{MARKER}\n{note}\n"
 
 
 def render_pr_body(issue: int, diff: str) -> str:
@@ -148,11 +173,11 @@ def render_pr_body(issue: int, diff: str) -> str:
     return "\n".join(lines) + "\n"
 
 
-def parse_diff(body: str, workdir: Path, run_url: str) -> None:
-    """Compare an issue attachment with ``dump/`` and write the comment.
+def parse_diff(body: str, workdir: Path) -> None:
+    """Compare an issue attachment with ``dump/`` and write the results.
 
-    Always writes ``code.txt``, ``diff.txt``, ``error.txt`` and ``body.md`` in
-    *workdir*, so a bad attachment becomes a comment instead of a failed job.
+    Always writes ``code.txt``, ``diff.txt`` and ``error.txt`` in *workdir*, so
+    a bad attachment becomes a comment instead of a failed job.
     """
     diff_path = workdir / "diff.txt"
     error_path = workdir / "error.txt"
@@ -176,9 +201,80 @@ def parse_diff(body: str, workdir: Path, run_url: str) -> None:
         else:
             code = diff_against_dump(apkg, diff_path, error_path)
     (workdir / "code.txt").write_text(f"{code}\n")
-    (workdir / "body.md").write_text(
-        render_comment(code, diff_path.read_text(), error_path.read_text(), run_url)
+
+
+def artifact_url(repo: str, run_id: str, name: str) -> str | None:
+    """Return the web URL of artifact *name* of run *run_id*, or None."""
+    result = run(
+        [
+            "gh",
+            "api",
+            f"repos/{repo}/actions/runs/{run_id}/artifacts",
+            "--jq",
+            f'.artifacts[] | select(.name == "{name}") | .id',
+        ]
     )
+    ids = result.stdout.split()
+    if not ids:
+        return None
+    return f"https://github.com/{repo}/actions/runs/{run_id}/artifacts/{ids[0]}"
+
+
+def post(code: int, diff: str, error: str, issue: int, repo: str, run_id: str) -> None:
+    """Post the comparison result, linking the full diff when truncated."""
+    full_url = None
+    if code == 1 and len(diff) > DIFF_LIMIT:
+        full_url = artifact_url(repo, run_id, "deck-diff")
+    _upsert_comment(repo, issue, MARKER, render_comment(code, diff, error, full_url))
+
+
+def _comment_ids(repo: str, issue: int, marker: str) -> list[str]:
+    """Return the ids of the issue comments that carry *marker*."""
+    result = run(
+        [
+            "gh",
+            "api",
+            f"repos/{repo}/issues/{issue}/comments",
+            "--paginate",
+            "--jq",
+            f'.[] | select(.body | contains("{marker}")) | .id',
+        ]
+    )
+    return result.stdout.split()
+
+
+def _upsert_comment(repo: str, issue: int, marker: str, body: str) -> str:
+    """Create or update the bot comment that carries *marker*."""
+    with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False) as handle:
+        handle.write(body)
+        path = Path(handle.name)
+    try:
+        ids = _comment_ids(repo, issue, marker)
+        if ids:
+            command = [
+                "gh",
+                "api",
+                "-X",
+                "PATCH",
+                f"repos/{repo}/issues/comments/{ids[0]}",
+                "-F",
+                f"body=@{path}",
+                "--jq",
+                ".html_url",
+            ]
+        else:
+            command = [
+                "gh",
+                "api",
+                f"repos/{repo}/issues/comments/{issue}",
+                "-F",
+                f"body=@{path}",
+                "--jq",
+                ".html_url",
+            ]
+        return run(command).stdout.strip()
+    finally:
+        path.unlink(missing_ok=True)
 
 
 def parse_apply(body: str, workdir: Path, issue: int) -> bool:
@@ -276,9 +372,7 @@ def _cmd_normalize(args: argparse.Namespace) -> int:
 def _cmd_comment(args: argparse.Namespace) -> int:
     """Print the issue comment body."""
     print(
-        render_comment(
-            args.code, args.diff.read_text(), args.error.read_text(), args.run_url
-        ),
+        render_comment(args.code, args.diff.read_text(), args.error.read_text()),
         end="",
     )
     return 0
@@ -292,7 +386,26 @@ def _cmd_pr_body(args: argparse.Namespace) -> int:
 
 def _cmd_parse_diff(args: argparse.Namespace) -> int:
     """Compare the attachment with ``dump/`` and write the results."""
-    parse_diff(_read_body(args.body), args.workdir, args.run_url)
+    parse_diff(_read_body(args.body), args.workdir)
+    return 0
+
+
+def _cmd_ack(_args: argparse.Namespace) -> int:
+    """Print the comment posted while the comparison runs."""
+    print(render_ack(), end="")
+    return 0
+
+
+def _cmd_post(args: argparse.Namespace) -> int:
+    """Post the comparison result as an issue comment."""
+    post(
+        args.code,
+        args.diff.read_text(),
+        args.error.read_text(),
+        args.issue,
+        args.repo,
+        args.run_id,
+    )
     return 0
 
 
@@ -312,6 +425,9 @@ def _build_parser() -> argparse.ArgumentParser:
     url.add_argument("body", help='body file ("-" for stdin)')
     url.set_defaults(func=_cmd_url)
 
+    ack = subparsers.add_parser("ack", help="print the working comment")
+    ack.set_defaults(func=_cmd_ack)
+
     normalize = subparsers.add_parser(
         "normalize", help="write an .apkg from an attachment"
     )
@@ -323,7 +439,6 @@ def _build_parser() -> argparse.ArgumentParser:
     comment.add_argument("code", type=int)
     comment.add_argument("diff", type=Path)
     comment.add_argument("error", type=Path)
-    comment.add_argument("run_url")
     comment.set_defaults(func=_cmd_comment)
 
     pr_body = subparsers.add_parser("pr-body", help="print the pull request body")
@@ -336,7 +451,6 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parse_diff.add_argument("body", help='body file ("-" for stdin)')
     parse_diff.add_argument("workdir", type=Path)
-    parse_diff.add_argument("run_url")
     parse_diff.set_defaults(func=_cmd_parse_diff)
 
     parse_apply = subparsers.add_parser(
@@ -346,6 +460,15 @@ def _build_parser() -> argparse.ArgumentParser:
     parse_apply.add_argument("workdir", type=Path)
     parse_apply.add_argument("issue", type=int)
     parse_apply.set_defaults(func=_cmd_parse_apply)
+
+    post = subparsers.add_parser("post", help="post the comparison comment")
+    post.add_argument("code", type=int)
+    post.add_argument("diff", type=Path)
+    post.add_argument("error", type=Path)
+    post.add_argument("issue", type=int)
+    post.add_argument("repo")
+    post.add_argument("run_id")
+    post.set_defaults(func=_cmd_post)
 
     return parser
 

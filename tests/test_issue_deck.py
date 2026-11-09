@@ -53,6 +53,29 @@ def _patch_run(
     monkeypatch.setattr(issue_deck, "run", fake)
 
 
+def _patch_gh(
+    monkeypatch: pytest.MonkeyPatch,
+    *,
+    artifact: str = "123",
+    existing: str = "",
+    url: str = "https://example/comment",
+    capture: dict[str, str] | None = None,
+) -> None:
+    def fake(command: list[str]) -> subprocess.CompletedProcess[str]:
+        joined = " ".join(command)
+        if "/artifacts" in joined:
+            return subprocess.CompletedProcess(command, 0, artifact, "")
+        if "--paginate" in command:
+            return subprocess.CompletedProcess(command, 0, existing, "")
+        if capture is not None:
+            for part in command:
+                if part.startswith("body=@"):
+                    capture["body"] = Path(part[len("body=@") :]).read_text()
+        return subprocess.CompletedProcess(command, 0, url, "")
+
+    monkeypatch.setattr(issue_deck, "run", fake)
+
+
 def test_find_attachment_url_markdown_link() -> None:
     body = "hello\n[deck.apkg.zip](https://github.com/user-attachments/assets/abc)\n"
     assert (
@@ -142,30 +165,50 @@ def test_diff_against_dump_writes_output(
     assert error.read_text() == "err"
 
 
+def test_render_comment_mentions_bot() -> None:
+    body = issue_deck.render_comment(0, "", "")
+    assert issue_deck.BOT_NOTE in body
+    assert body.index("Bot") < body.index("### Deck-Vorschlag")
+
+
 def test_render_comment_unchanged() -> None:
-    body = issue_deck.render_comment(0, "", "", "http://run")
+    body = issue_deck.render_comment(0, "", "")
     assert issue_deck.MARKER in body
     assert "inhaltsgleich" in body
 
 
 def test_render_comment_diff() -> None:
-    body = issue_deck.render_comment(1, "-x\n+y\n", "", "http://run")
+    body = issue_deck.render_comment(1, "-x\n+y\n", "")
     assert "```diff" in body
     assert "+y" in body
 
 
-def test_render_comment_truncates() -> None:
+def test_render_comment_truncates_with_link_outside_details() -> None:
     body = issue_deck.render_comment(
-        1, "x" * (issue_deck.DIFF_LIMIT + 10), "", "http://run"
+        1, "x" * (issue_deck.DIFF_LIMIT + 10), "", "https://example/full"
     )
     assert "gekürzt" in body
+    assert "https://example/full" in body
+    assert body.index("</details>") < body.index("gekürzt")
     assert "x" * (issue_deck.DIFF_LIMIT + 1) not in body
 
 
+def test_render_comment_truncates_without_link() -> None:
+    body = issue_deck.render_comment(1, "x" * (issue_deck.DIFF_LIMIT + 10), "")
+    assert "Der Diff ist gekürzt." in body
+    assert "](http" not in body
+
+
 def test_render_comment_error() -> None:
-    body = issue_deck.render_comment(2, "", "boom", "http://run")
+    body = issue_deck.render_comment(2, "", "boom")
     assert "umbenennen" in body
     assert "boom" in body
+
+
+def test_render_ack() -> None:
+    body = issue_deck.render_ack()
+    assert body.startswith(issue_deck.MARKER)
+    assert "Bot" in body
 
 
 def test_render_pr_body() -> None:
@@ -179,10 +222,58 @@ def test_render_pr_body_truncates() -> None:
     assert "gekürzt" in body
 
 
+def test_artifact_url(monkeypatch: pytest.MonkeyPatch) -> None:
+    _patch_gh(monkeypatch, artifact="42")
+    url = issue_deck.artifact_url("o/r", "9", "deck-diff")
+    assert url == "https://github.com/o/r/actions/runs/9/artifacts/42"
+
+
+def test_artifact_url_missing(monkeypatch: pytest.MonkeyPatch) -> None:
+    _patch_gh(monkeypatch, artifact="")
+    assert issue_deck.artifact_url("o/r", "9", "deck-diff") is None
+
+
+def test_post_links_full_diff(monkeypatch: pytest.MonkeyPatch) -> None:
+    captured: dict[str, str] = {}
+    _patch_gh(monkeypatch, artifact="42", capture=captured)
+    issue_deck.post(1, "x" * (issue_deck.DIFF_LIMIT + 1), "", 7, "o/r", "9")
+    assert "https://github.com/o/r/actions/runs/9/artifacts/42" in captured["body"]
+
+
+def test_post_short_diff_skips_artifact_lookup(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[str] = []
+
+    def fake(command: list[str]) -> subprocess.CompletedProcess[str]:
+        calls.append(" ".join(command))
+        if "--paginate" in command:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        return subprocess.CompletedProcess(command, 0, "https://example/comment", "")
+
+    monkeypatch.setattr(issue_deck, "run", fake)
+    issue_deck.post(1, "-x\n+y\n", "", 7, "o/r", "9")
+    assert not any("/artifacts" in call for call in calls)
+
+
+def test_post_updates_existing_comment(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[str] = []
+
+    def fake(command: list[str]) -> subprocess.CompletedProcess[str]:
+        calls.append(" ".join(command))
+        if "--paginate" in command:
+            return subprocess.CompletedProcess(command, 0, "456", "")
+        return subprocess.CompletedProcess(command, 0, "https://example/comment", "")
+
+    monkeypatch.setattr(issue_deck, "run", fake)
+    issue_deck.post(2, "", "boom", 7, "o/r", "9")
+    assert any("PATCH" in call and "/comments/456" in call for call in calls)
+
+
 def test_parse_diff_without_url(tmp_path: Path) -> None:
-    issue_deck.parse_diff("no link", tmp_path, "http://run")
+    issue_deck.parse_diff("no link", tmp_path)
     assert (tmp_path / "code.txt").read_text().strip() == "2"
-    assert "Kein Anhang" in (tmp_path / "body.md").read_text()
+    assert "Kein Anhang" in (tmp_path / "error.txt").read_text()
 
 
 def test_parse_diff_junk_attachment(
@@ -193,11 +284,9 @@ def test_parse_diff_junk_attachment(
         dest.write_bytes(b"junk")
 
     monkeypatch.setattr(issue_deck, "fetch_attachment", fetch)
-    issue_deck.parse_diff(
-        "https://github.com/user-attachments/x", tmp_path, "http://run"
-    )
+    issue_deck.parse_diff("https://github.com/user-attachments/x", tmp_path)
     assert (tmp_path / "code.txt").read_text().strip() == "2"
-    assert "kein Anki-Deck" in (tmp_path / "body.md").read_text()
+    assert "kein Anki-Deck" in (tmp_path / "error.txt").read_text()
 
 
 def test_parse_diff_fetch_error(
@@ -208,41 +297,32 @@ def test_parse_diff_fetch_error(
         raise OSError("boom")
 
     monkeypatch.setattr(issue_deck, "fetch_attachment", fetch)
-    issue_deck.parse_diff(
-        "https://github.com/user-attachments/x", tmp_path, "http://run"
-    )
+    issue_deck.parse_diff("https://github.com/user-attachments/x", tmp_path)
     assert (tmp_path / "code.txt").read_text().strip() == "2"
-    assert "konnte nicht geladen" in (tmp_path / "body.md").read_text()
+    assert "konnte nicht geladen" in (tmp_path / "error.txt").read_text()
 
 
 def test_parse_diff_unchanged(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(issue_deck, "fetch_attachment", _fake_fetch_apkg)
     _patch_diff(monkeypatch, 0)
-    issue_deck.parse_diff(
-        "https://github.com/user-attachments/x", tmp_path, "http://run"
-    )
+    issue_deck.parse_diff("https://github.com/user-attachments/x", tmp_path)
     assert (tmp_path / "code.txt").read_text().strip() == "0"
-    assert "inhaltsgleich" in (tmp_path / "body.md").read_text()
 
 
 def test_parse_diff_changed(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(issue_deck, "fetch_attachment", _fake_fetch_apkg)
     _patch_diff(monkeypatch, 1, out="-x\n+y\n")
-    issue_deck.parse_diff(
-        "https://github.com/user-attachments/x", tmp_path, "http://run"
-    )
+    issue_deck.parse_diff("https://github.com/user-attachments/x", tmp_path)
     assert (tmp_path / "code.txt").read_text().strip() == "1"
-    assert "+y" in (tmp_path / "body.md").read_text()
+    assert "+y" in (tmp_path / "diff.txt").read_text()
 
 
 def test_parse_diff_tool_error(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(issue_deck, "fetch_attachment", _fake_fetch_apkg)
     _patch_diff(monkeypatch, 2, err="bad package")
-    issue_deck.parse_diff(
-        "https://github.com/user-attachments/x", tmp_path, "http://run"
-    )
+    issue_deck.parse_diff("https://github.com/user-attachments/x", tmp_path)
     assert (tmp_path / "code.txt").read_text().strip() == "2"
-    assert "bad package" in (tmp_path / "body.md").read_text()
+    assert "bad package" in (tmp_path / "error.txt").read_text()
 
 
 def test_parse_apply_changed(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -311,13 +391,17 @@ def test_cli_url_stdin(
     assert capsys.readouterr().out.strip() == "https://github.com/user-attachments/abc"
 
 
+def test_cli_ack(capsys: pytest.CaptureFixture[str]) -> None:
+    assert issue_deck.main(["ack"]) == 0
+    assert "Bot" in capsys.readouterr().out
+
+
 def test_cli_comment(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     diff = tmp_path / "diff.txt"
     error = tmp_path / "error.txt"
     diff.write_text("")
     error.write_text("")
-    code = issue_deck.main(["comment", "0", str(diff), str(error), "http://run"])
-    assert code == 0
+    assert issue_deck.main(["comment", "0", str(diff), str(error)]) == 0
     assert "inhaltsgleich" in capsys.readouterr().out
 
 
@@ -348,8 +432,8 @@ def test_cli_normalize_error(
 def test_cli_parse_diff(tmp_path: Path) -> None:
     body = tmp_path / "body.txt"
     body.write_text("no link")
-    assert issue_deck.main(["parse-diff", str(body), str(tmp_path), "http://run"]) == 0
-    assert (tmp_path / "body.md").exists()
+    assert issue_deck.main(["parse-diff", str(body), str(tmp_path)]) == 0
+    assert (tmp_path / "code.txt").exists()
 
 
 def test_cli_parse_apply(
@@ -361,6 +445,15 @@ def test_cli_parse_apply(
     body.write_text("https://github.com/user-attachments/x")
     assert issue_deck.main(["parse-apply", str(body), str(tmp_path), "7"]) == 0
     assert capsys.readouterr().out.strip() == "true"
+
+
+def test_cli_post(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _patch_gh(monkeypatch)
+    diff = tmp_path / "diff.txt"
+    error = tmp_path / "error.txt"
+    diff.write_text("")
+    error.write_text("")
+    assert issue_deck.main(["post", "0", str(diff), str(error), "7", "o/r", "9"]) == 0
 
 
 def test_module_entrypoint(tmp_path: Path) -> None:
