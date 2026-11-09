@@ -1,6 +1,5 @@
 [project]
 name = "anki-wege-zu-cicero"
-# The release version is the git tag; this file never carries one.
 dynamic = ["version"]
 description = "Anki-Karteikarten zu Wege zu Cicero (Per Aspera ad Astra)"
 readme = "README.md"
@@ -14,6 +13,5 @@ dependencies = [
     "anki-tools @ https://github.com/lsg551/anki-tools/releases/download/v0.1.0-beta.1/anki_tools-0.1.0b1-py3-none-any.whl",
 ]
 
-# Not a Python package: this project only pins anki-tools for the dump tooling.
 [tool.uv]
 package = false
