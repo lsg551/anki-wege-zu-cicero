@@ -3,9 +3,10 @@ name: Apply a deck change from an issue
 # A maintainer comments "/apply" on an issue that carries an .apkg (renamed to
 # .zip, which GitHub accepts). The parse job (no write token) turns the package
 # into a dump and a package and writes the pull request body; the pr job (write
-# token) only copies those files, commits them, and opens a pull request. The
-# write job never runs the anki parser on untrusted input. The branches live in
-# scripts/issue_deck.py, which is unit tested.
+# token) only copies those files, commits them, and opens a pull request; the
+# report job replies to the command. The write job never runs the anki parser
+# on untrusted input. The branches live in scripts/issue_deck.py, which is
+# unit tested.
 on:
   issue_comment:
     types: [created]
@@ -26,34 +27,52 @@ jobs:
     permissions:
       contents: read
     outputs:
-      changed: ${{ steps.parse.outputs.changed }}
+      ok: ${{ steps.apply.outputs.ok }}
+      changed: ${{ steps.apply.outputs.changed }}
+      message: ${{ steps.apply.outputs.message }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
       - name: Turn the attachment into a dump
-        id: parse
+        id: apply
         env:
           BODY: ${{ github.event.issue.body }}
           ISSUE: ${{ github.event.issue.number }}
         run: |
           set -euo pipefail
           printf '%s' "$BODY" > "$RUNNER_TEMP/body.txt"
-          changed=$(uv run python scripts/issue_deck.py parse-apply \
-            "$RUNNER_TEMP/body.txt" "$RUNNER_TEMP/change" "$ISSUE")
-          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          set +e
+          out=$(uv run python scripts/issue_deck.py parse-apply \
+            "$RUNNER_TEMP/body.txt" "$RUNNER_TEMP/change" "$ISSUE" 2>&1)
+          code=$?
+          set -e
+          if [ "$code" -ne 0 ]; then
+            {
+              echo "ok=false"
+              echo "message<<_EOF_"
+              printf '%s\n' "$out"
+              echo "_EOF_"
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+            echo "changed=$out" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: steps.apply.outputs.ok == 'true'
         with:
           name: deck-change
-          retention-days: 3
+          retention-days: 45
           path: ${{ runner.temp }}/change
 
   pr:
     needs: parse
-    if: needs.parse.outputs.changed == 'true'
+    if: needs.parse.outputs.ok == 'true' && needs.parse.outputs.changed == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
+    outputs:
+      pr_url: ${{ steps.pr.outputs.pr_url }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -61,6 +80,7 @@ jobs:
           name: deck-change
           path: ${{ runner.temp }}/change
       - name: Open a pull request
+        id: pr
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE: ${{ github.event.issue.number }}
@@ -88,3 +108,31 @@ jobs:
             gh pr create --base main --head "$branch" \
               --title "$title" --body-file "$prbody"
           fi
+          echo "pr_url=$(gh pr view "$branch" --json url --jq .url)" >> "$GITHUB_OUTPUT"
+
+  report:
+    needs: [parse, pr]
+    if: always() && needs.parse.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Reply to the command
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          ISSUE: ${{ github.event.issue.number }}
+          OK: ${{ needs.parse.outputs.ok }}
+          CHANGED: ${{ needs.parse.outputs.changed }}
+          MESSAGE: ${{ needs.parse.outputs.message }}
+          PR_URL: ${{ needs.pr.outputs.pr_url }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$MESSAGE" > "$RUNNER_TEMP/message.txt"
+          [ -n "$PR_URL" ] || PR_URL="-"
+          python3 scripts/issue_deck.py report-apply \
+            "$ISSUE" "$REPO" "$OK" "$CHANGED" "$PR_URL" \
+            "$RUNNER_TEMP/message.txt" "$RUN_URL"

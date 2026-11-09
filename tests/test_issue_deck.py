@@ -222,6 +222,48 @@ def test_render_pr_body_truncates() -> None:
     assert "gekürzt" in body
 
 
+def test_render_apply_result_failure() -> None:
+    body = issue_deck.render_apply_result(
+        ok=False,
+        changed=False,
+        pr_url=None,
+        message="issue_deck: boom",
+        run_url="https://run",
+    )
+    assert issue_deck.APPLY_MARKER in body
+    assert "boom" in body
+    assert "issue_deck:" not in body
+
+
+def test_render_apply_result_failure_without_message() -> None:
+    body = issue_deck.render_apply_result(
+        ok=False, changed=False, pr_url=None, message="", run_url="https://run"
+    )
+    assert "https://run" in body
+
+
+def test_render_apply_result_unchanged() -> None:
+    body = issue_deck.render_apply_result(
+        ok=True, changed=False, pr_url=None, message="", run_url="https://run"
+    )
+    assert "nichts zu übernehmen" in body
+
+
+def test_render_apply_result_pr() -> None:
+    body = issue_deck.render_apply_result(
+        ok=True, changed=True, pr_url="https://pr/1", message="", run_url="https://run"
+    )
+    assert "https://pr/1" in body
+
+
+def test_render_apply_result_pr_failed() -> None:
+    body = issue_deck.render_apply_result(
+        ok=True, changed=True, pr_url=None, message="", run_url="https://run"
+    )
+    assert "fehlgeschlagen" in body
+    assert "https://run" in body
+
+
 def test_artifact_url(monkeypatch: pytest.MonkeyPatch) -> None:
     _patch_gh(monkeypatch, artifact="42")
     url = issue_deck.artifact_url("o/r", "9", "deck-diff")
@@ -270,10 +312,32 @@ def test_post_updates_existing_comment(monkeypatch: pytest.MonkeyPatch) -> None:
     assert any("PATCH" in call and "/comments/456" in call for call in calls)
 
 
+def test_report_apply(monkeypatch: pytest.MonkeyPatch) -> None:
+    captured: dict[str, str] = {}
+    _patch_gh(monkeypatch, capture=captured)
+    issue_deck.report_apply(
+        7,
+        "o/r",
+        ok=True,
+        changed=True,
+        pr_url="https://pr/1",
+        message="",
+        run_url="https://run",
+    )
+    assert issue_deck.APPLY_MARKER in captured["body"]
+    assert "https://pr/1" in captured["body"]
+
+
 def test_parse_diff_without_url(tmp_path: Path) -> None:
     issue_deck.parse_diff("no link", tmp_path)
     assert (tmp_path / "code.txt").read_text().strip() == "2"
     assert "Kein Anhang" in (tmp_path / "error.txt").read_text()
+
+
+def test_parse_diff_creates_workdir(tmp_path: Path) -> None:
+    workdir = tmp_path / "missing" / "out"
+    issue_deck.parse_diff("no link", workdir)
+    assert (workdir / "code.txt").read_text().strip() == "2"
 
 
 def test_parse_diff_junk_attachment(
@@ -347,6 +411,18 @@ def test_parse_apply_unchanged(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
 def test_parse_apply_without_url(tmp_path: Path) -> None:
     with pytest.raises(issue_deck.IssueError):
         issue_deck.parse_apply("no link", tmp_path, 7)
+
+
+def test_parse_apply_creates_workdir(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(issue_deck, "fetch_attachment", _fake_fetch_apkg)
+    _patch_run(monkeypatch, diff_code=0)
+    workdir = tmp_path / "missing" / "change"
+    changed = issue_deck.parse_apply(
+        "https://github.com/user-attachments/x", workdir, 7
+    )
+    assert changed is False
 
 
 @pytest.mark.parametrize("fail", ["dump", "build"])
@@ -454,6 +530,16 @@ def test_cli_post(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     diff.write_text("")
     error.write_text("")
     assert issue_deck.main(["post", "0", str(diff), str(error), "7", "o/r", "9"]) == 0
+
+
+def test_cli_report_apply(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _patch_gh(monkeypatch)
+    message = tmp_path / "message.txt"
+    message.write_text("")
+    code = issue_deck.main(
+        ["report-apply", "7", "o/r", "true", "false", "-", str(message), "https://run"]
+    )
+    assert code == 0
 
 
 def test_module_entrypoint(tmp_path: Path) -> None:

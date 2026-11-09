@@ -20,13 +20,14 @@ from pathlib import Path
 from typing import cast
 
 MARKER = "<!-- anki-tools-diff -->"
+APPLY_MARKER = "<!-- anki-tools-apply -->"
 DIFF_LIMIT = 60_000
 
 BOT_NOTE = (
     "> [!NOTE]\n"
-    "> 🤖 Diese Antwort wurde automatisch erstellt. Ich bin ein Bot und kann\n"
-    "> keine Fragen beantworten. Ein Maintainer prüft deinen Vorschlag und\n"
-    "> meldet sich."
+    "> 🤖 Diese Antwort wurde automatisch erstellt. Ich bin ein Bot und kann "
+    "keine Fragen beantworten. Ein Maintainer prüft deinen Vorschlag und "
+    "meldet sich."
 )
 
 _URL_RE = re.compile(r"https?://[^\s)]+")
@@ -148,9 +149,9 @@ def render_ack() -> str:
     """Return the comment posted while the comparison runs."""
     note = (
         "> [!NOTE]\n"
-        "> 🤖 Danke für deinen Vorschlag. Ich bin ein Bot und vergleiche deine\n"
-        "> Datei gerade mit dem Deck im Repository. Das dauert etwa eine\n"
-        "> Minute. Danach meldet sich ein Maintainer."
+        "> 🤖 Danke für deinen Vorschlag. Ich bin ein Bot und vergleiche deine "
+        "Datei gerade mit dem Deck im Repository. Das dauert etwa eine "
+        "Minute. Danach meldet sich ein Maintainer."
     )
     return f"{MARKER}\n{note}\n"
 
@@ -179,6 +180,7 @@ def parse_diff(body: str, workdir: Path) -> None:
     Always writes ``code.txt``, ``diff.txt`` and ``error.txt`` in *workdir*, so
     a bad attachment becomes a comment instead of a failed job.
     """
+    workdir.mkdir(parents=True, exist_ok=True)
     diff_path = workdir / "diff.txt"
     error_path = workdir / "error.txt"
     diff_path.write_text("")
@@ -226,6 +228,57 @@ def post(code: int, diff: str, error: str, issue: int, repo: str, run_id: str) -
     if code == 1 and len(diff) > DIFF_LIMIT:
         full_url = artifact_url(repo, run_id, "deck-diff")
     _upsert_comment(repo, issue, MARKER, render_comment(code, diff, error, full_url))
+
+
+def render_apply_result(
+    *,
+    ok: bool,
+    changed: bool,
+    pr_url: str | None,
+    message: str,
+    run_url: str,
+) -> str:
+    """Return the reply to the ``/apply`` command."""
+    lines = [APPLY_MARKER, BOT_NOTE, "", "### Übernahme", ""]
+    if not ok:
+        text = message.strip()
+        prefix = "issue_deck: "
+        if text.startswith(prefix):
+            text = text[len(prefix) :]
+        lines += [
+            "Ich konnte den Vorschlag nicht übernehmen:",
+            "",
+            "```",
+            (text or f"Details im CI-Lauf: {run_url}")[:4000],
+            "```",
+        ]
+    elif not changed:
+        lines.append(
+            "Der Vorschlag ist inhaltsgleich mit dem Repository; es gibt "
+            "nichts zu übernehmen."
+        )
+    elif pr_url is not None:
+        lines.append(f"Übernommen: {pr_url}")
+    else:
+        lines.append(f"Die Übernahme ist fehlgeschlagen. Details im CI-Lauf: {run_url}")
+    return "\n".join(lines) + "\n"
+
+
+def report_apply(
+    issue: int,
+    repo: str,
+    *,
+    ok: bool,
+    changed: bool,
+    pr_url: str | None,
+    message: str,
+    run_url: str,
+) -> None:
+    """Post the ``/apply`` outcome as an issue comment."""
+    body = render_apply_result(
+        ok=ok, changed=changed, pr_url=pr_url, message=message, run_url=run_url
+    )
+    _upsert_comment(repo, issue, APPLY_MARKER, body)
 
 
 def _comment_ids(repo: str, issue: int, marker: str) -> list[str]:
@@ -289,6 +342,7 @@ def parse_apply(body: str, workdir: Path, issue: int) -> bool:
     url = find_attachment_url(body)
     if url is None:
         raise IssueError("no attachment link found")
+    workdir.mkdir(parents=True, exist_ok=True)
     attachment = workdir / "attachment"
     apkg = workdir / "issue.apkg"
     fetch_attachment(url, attachment)
@@ -409,6 +463,25 @@ def _cmd_post(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_report_apply(args: argparse.Namespace) -> int:
+    """Post the ``/apply`` outcome as an issue comment."""
+    message = ""
+    if args.message != "-":
+        path = Path(args.message)
+        if path.is_file():
+            message = path.read_text()
+    report_apply(
+        args.issue,
+        args.repo,
+        ok=args.ok == "true",
+        changed=args.changed == "true",
+        pr_url=None if args.pr_url == "-" else args.pr_url,
+        message=message,
+        run_url=args.run_url,
+    )
+    return 0
+
+
 def _cmd_parse_apply(args: argparse.Namespace) -> int:
     """Turn the attachment into a dump and print whether it changed."""
     changed = parse_apply(_read_body(args.body), args.workdir, args.issue)
@@ -469,6 +542,16 @@ def _build_parser() -> argparse.ArgumentParser:
     post.add_argument("repo")
     post.add_argument("run_id")
     post.set_defaults(func=_cmd_post)
+
+    report_apply = subparsers.add_parser("report-apply", help="post the /apply outcome")
+    report_apply.add_argument("issue", type=int)
+    report_apply.add_argument("repo")
+    report_apply.add_argument("ok")
+    report_apply.add_argument("changed")
+    report_apply.add_argument("pr_url")
+    report_apply.add_argument("message", help='message file ("-" for none)')
+    report_apply.add_argument("run_url")
+    report_apply.set_defaults(func=_cmd_report_apply)
 
     return parser
 
