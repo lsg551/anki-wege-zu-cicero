@@ -1,19 +1,36 @@
 # Contributing
 
-Korrekturen, Ergänzungen, etc. weden begrüßt.
+Korrekturen, Ergänzungen und Verbesserungen sind willkommen.
 
-Um das überarbeitete Deck zu exportieren:
+## Ohne Git-Kenntnisse: Änderung als Issue vorschlagen
 
-1. Anki-Deck *Latein* durch Anklicken auswählen.
-2. Auf das Einstellungs-Zahnrad klicken: `Export` und folgende Einstellungen
-   übernehmen:
-    - *Export format*: `Anki Deck Package (.akpg)`
-    - *Include*: `Latein`
-    - Optionen: {`Include deck presets`, `Include media`}
-3. Auf `Export…` klicken.
+1. In Anki das Deck *Latein* überarbeiten.
+2. Das Deck exportieren: Deck anklicken, Zahnrad → `Export`, Format
+   `Anki Deck Package (.apkg)`, *Include* `Latein`, Option
+   `Include deck presets` einschalten. Siehe
+   [*Anki: Exporting*](https://docs.ankiweb.net/manual/exporting).
+3. Die exportierte Datei umbenennen, sodass sie zusätzlich auf `.zip` endet
+   (`…apkg` → `…apkg.zip`). GitHub akzeptiert keine `.apkg`-Dateien.
+4. Ein [neues Issue](https://github.com/lsg551/anki-wege-zu-cicero/issues/new/choose)
+   mit der Vorlage *Änderung oder Korrektur vorschlagen* öffnen und die
+   umbenannte Datei anhängen.
 
-Für die resultierende `.akkg`-Datei bitte einen Pull Request öffnen. Siehe
-[*Anki: Exporting*](https://docs.ankiweb.net/manual/exporting) für mehr
-Informationen.
+Ein Bot vergleicht die angehängte Datei mit dem Deck im Repository und
+kommentiert die Unterschiede als Diff. Ist die Datei nicht lesbar, weist ein
+Kommentar auf das Umbenennen hin. Anschließend prüft ein Maintainer den Diff und
+integriert die Änderungen.
 
-Alternativ kann auch ein Issue mit den Änderungen als Freitext eröffnet werden.
+## Mit Git
+
+Das Repository enthält `dump/`, eine textbasierte Fassung des Decks. Sie wird
+mit [`anki-tools`](https://github.com/lsg551/anki-tools) aus einer `.apkg`-Datei
+erzeugt und **nicht von Hand bearbeitet**. Änderungen werden in Anki vorgenommen
+und dann neu gedumpt.
+
+```bash
+uv run anki-tools dump anki-wege-zu-cicero.apkg -o dump/ --with-deck-configs --no-media
+uv run anki-tools build dump -o anki-wege-zu-cicero.apkg
+```
+
+Für einen Pull Request `dump/` und `anki-wege-zu-cicero.apkg` zusammen
+committen. Die CI prüft, dass beide zueinander passen.
