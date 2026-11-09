@@ -13,9 +13,7 @@ und besonders deren ausgewählte Bedeutungen entscheidend.
 ## Installation
 
 1. Letzte Version der `.apkg`-Datei unter
-   [*Releases*](https://github.com/lsg551/anki-wege-zu-cicero/releases)
-   oder [`anki-wege-zu-cicero.apkg`](https://github.com/lsg551/anki-wege-zu-cicero/blob/main/anki-wege-zu-cicero.apkg)
-   direkt (vom <tt>main</tt>-Branch) herunterladen.
+   [*Releases*](https://github.com/lsg551/anki-wege-zu-cicero/releases).
 2. Anki öffnen: `Import File` > `.apkg`-Datei auswählen.
 3. Medien und Deck-Presets als Optionen beim Import inkludieren.
 
@@ -23,6 +21,9 @@ Das war's.
 
 Siehe [*Anki: Importing Packaged Decks*](https://docs.ankiweb.net/manual/importing/packaged-decks)
 für mehr Informationen.
+
+(Achtung: Die `.apkg`-Datei im *main*-Branch könnte nicht publikationsreif sein,
+daher besser die Releases nutzen!)
 
 ### Upgrade auf neuere Version
 
