@@ -838,7 +838,7 @@
     "templates": [
       {
         "name": "Lexikoneintrag",
-        "qfmt": "Was bedeutet das Verb?<br>\n\n<i>\n{{Präsens 1.Sg. Ind.Akt.}},\n{{Infinitiv Präsens Akt.}},\n{{Perfekt 1.Sg. Ind.Akt.}},\n{{PPP (Supinum)}}\n</i>",
+        "qfmt": "Was bedeutet das Verb?<br>\n\n<i>\n{{Infinitiv Präsens Akt.}},\n{{Präsens 1.Sg. Ind.Akt.}},\n{{Perfekt 1.Sg. Ind.Akt.}},\n{{PPP (Supinum)}}\n</i>",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
         "options": {
           "bafmt": "",
