@@ -9,11 +9,11 @@ und besonders deren ausgewählte Bedeutungen entscheidend.
 
 ## Installation
 
-1. Letzte Version der `.akpg`-Datei unter
+1. Letzte Version der `.apkg`-Datei unter
    [*Releases*](https://github.com/lsg551/anki-wege-zu-cicero/releases)
    oder [`anki-wege-zu-cicero.apkg`](https://github.com/lsg551/anki-wege-zu-cicero/blob/main/anki-wege-zu-cicero.apkg)
    direkt (vom <tt>main</tt>-Branch) herunterladen.
-2. Anki öffnen: `Import File` > `.akpg`-Datei auswählen.
+2. Anki öffnen: `Import File` > `.apkg`-Datei auswählen.
 3. Medien und Deck-Presets als Optionen beim Import inkludieren.
 
 Das war's.
@@ -23,7 +23,7 @@ für mehr Informationen.
 
 ### Upgrade auf neuere Version
 
-Wenn eine `.akpg`-Datei bereits importiert, nun aber mit einer neuen Version
+Wenn eine `.apkg`-Datei bereits importiert, nun aber mit einer neuen Version
 aktualisiert werden soll, die [Installationsschritte](#installation) einfach
 ein weiteres Mal durchführen. Anki aktualisiert das alte Deck automatisch.
 
