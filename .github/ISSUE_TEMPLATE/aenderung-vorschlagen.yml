@@ -5,8 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Danke, dass du hilfst! Exportiere bitte zuerst dein Deck aus Anki und
-        hänge die Datei unten an.
+        Danke, dass du hilfst! Exportiere bitte zuerst dein Deck aus Anki und hänge die Datei unten an.
 
         1. In Anki das Deck **Latein** anklicken.
         2. Auf das Zahnrad klicken: **Export**.
@@ -15,11 +14,8 @@ body:
            - *Include*: `Latein`
            - Option **Include deck presets** einschalten (Medien sind optional).
         4. Auf **Export…** klicken.
-        5. Die Datei umbenennen, sodass sie zusätzlich auf `.zip` endet:
-           `anki-wege-zu-cicero.apkg` → `anki-wege-zu-cicero.apkg.zip`.
-           (GitHub akzeptiert keine `.apkg`-Dateien.)
-        6. Die umbenannte Datei unten in das Feld **Exportierte Datei** ziehen
-           (Drag & Drop).
+        5. Die Datei umbenennen, sodass sie zusätzlich auf `.zip` endet: `anki-wege-zu-cicero.apkg` → `anki-wege-zu-cicero.apkg.zip`. (GitHub akzeptiert keine `.apkg`-Dateien.)
+        6. Die umbenannte Datei unten in das Feld **Exportierte Datei** ziehen (Drag & Drop).
   - type: textarea
     id: beschreibung
     attributes:
