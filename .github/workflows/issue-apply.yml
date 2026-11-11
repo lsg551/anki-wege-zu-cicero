@@ -84,11 +84,28 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          AUTHOR: ${{ github.event.issue.user.login }}
         run: |
           set -euo pipefail
           dumpdir=$(dirname "$(find "$RUNNER_TEMP/change" -name meta.json -print -quit)")
           apkg=$(find "$RUNNER_TEMP/change" -name deck.apkg -print -quit)
           prbody=$(find "$RUNNER_TEMP/change" -name pr-body.md -print -quit)
+
+          # Credit the reporter as co-author, unless the issue was opened by a bot.
+          coauthor=""
+          case "$AUTHOR" in
+            ''|*"[bot]") ;;
+            *)
+              name=$(gh api "users/$AUTHOR" --jq '.name // .login')
+              id=$(gh api "users/$AUTHOR" --jq '.id')
+              coauthor="$name <$id+$AUTHOR@users.noreply.github.com>"
+              ;;
+          esac
+
+          python3 scripts/issue_deck.py commit-message \
+            "$ISSUE" "$ISSUE_TITLE" "$coauthor" > "$RUNNER_TEMP/commit-msg.txt"
+          title=$(head -n1 "$RUNNER_TEMP/commit-msg.txt")
 
           branch="deck/issue-$ISSUE"
           git config user.name "github-actions[bot]"
@@ -98,12 +115,11 @@ jobs:
           cp -r "$dumpdir" dump
           cp "$apkg" anki-wege-zu-cicero.apkg
           git add dump anki-wege-zu-cicero.apkg
-          git commit -m "Deck: Änderungen aus #$ISSUE"
+          git commit -F "$RUNNER_TEMP/commit-msg.txt"
           git push --force -u origin "$branch"
 
-          title="Deck: Änderungen aus #$ISSUE"
           if gh pr view "$branch" > /dev/null 2>&1; then
-            gh pr edit "$branch" --body-file "$prbody"
+            gh pr edit "$branch" --title "$title" --body-file "$prbody"
           else
             gh pr create --base main --head "$branch" \
               --title "$title" --body-file "$prbody"

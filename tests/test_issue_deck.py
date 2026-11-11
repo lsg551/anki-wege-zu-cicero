@@ -241,6 +241,44 @@ def test_render_pr_body_truncates() -> None:
     assert "gekürzt" in body
 
 
+def test_strip_issue_prefix_removes_marker() -> None:
+    assert issue_deck.strip_issue_prefix("[Änderung] advocō korrigiert") == (
+        "advocō korrigiert"
+    )
+
+
+def test_strip_issue_prefix_case_insensitive() -> None:
+    assert issue_deck.strip_issue_prefix("[ÄNDERUNG] x") == "x"
+
+
+def test_strip_issue_prefix_without_marker() -> None:
+    assert issue_deck.strip_issue_prefix("Deck kaputt") == "Deck kaputt"
+
+
+def test_strip_issue_prefix_only_marker() -> None:
+    assert issue_deck.strip_issue_prefix("[Änderung] ") == ""
+
+
+def test_render_commit_message_uses_title() -> None:
+    message = issue_deck.render_commit_message(
+        7, "[Änderung] advocō korrigiert", "Erika <42+erika@users.noreply.github.com>"
+    )
+    lines = message.splitlines()
+    assert lines[0] == "advocō korrigiert"
+    assert lines[-1] == "Co-authored-by: Erika <42+erika@users.noreply.github.com>"
+    assert message.endswith("\n")
+
+
+def test_render_commit_message_without_coauthor() -> None:
+    message = issue_deck.render_commit_message(7, "advocō korrigiert")
+    assert "Co-authored-by" not in message
+
+
+def test_render_commit_message_falls_back_on_empty_title() -> None:
+    message = issue_deck.render_commit_message(7, "[Änderung] ")
+    assert message.splitlines()[0] == "Deck: Änderungen aus #7"
+
+
 def test_render_apply_result_failure() -> None:
     body = issue_deck.render_apply_result(
         ok=False,
@@ -541,6 +579,11 @@ def test_cli_pr_body(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None
     diff.write_text("x")
     assert issue_deck.main(["pr-body", "3", str(diff)]) == 0
     assert "Closes #3" in capsys.readouterr().out
+
+
+def test_cli_commit_message(capsys: pytest.CaptureFixture[str]) -> None:
+    assert issue_deck.main(["commit-message", "3", "[Änderung] x", ""]) == 0
+    assert capsys.readouterr().out.splitlines()[0] == "x"
 
 
 def test_cli_normalize(tmp_path: Path) -> None:

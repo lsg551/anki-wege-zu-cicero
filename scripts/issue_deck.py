@@ -174,6 +174,28 @@ def render_pr_body(issue: int, diff: str) -> str:
     return "\n".join(lines) + "\n"
 
 
+_PREFIX_RE = re.compile(r"^\[\s*änderung\s*\]\s*", re.IGNORECASE)
+
+
+def strip_issue_prefix(title: str) -> str:
+    """Return *title* without a leading ``[Änderung]`` marker."""
+    return _PREFIX_RE.sub("", title.strip()).strip()
+
+
+def render_commit_message(issue: int, title: str, coauthor: str = "") -> str:
+    """Return the commit message for an applied issue.
+
+    The subject is the issue title without its ``[Änderung]`` marker, so the
+    change is attributed to the reporter. *coauthor* is an optional
+    ``Name <email>`` string added as a ``Co-authored-by`` trailer.
+    """
+    subject = strip_issue_prefix(title) or f"Deck: Änderungen aus #{issue}"
+    lines = [subject, "", f"Übernimmt den Vorschlag aus #{issue}."]
+    if coauthor:
+        lines += ["", f"Co-authored-by: {coauthor}"]
+    return "\n".join(lines) + "\n"
+
+
 def parse_diff(body: str, workdir: Path) -> None:
     """Compare an issue attachment with ``dump/`` and write the results.
 
@@ -456,6 +478,12 @@ def _cmd_pr_body(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_commit_message(args: argparse.Namespace) -> int:
+    """Print the commit message."""
+    print(render_commit_message(args.issue, args.title, args.coauthor), end="")
+    return 0
+
+
 def _cmd_parse_diff(args: argparse.Namespace) -> int:
     """Compare the attachment with ``dump/`` and write the results."""
     parse_diff(_read_body(args.body), args.workdir)
@@ -536,6 +564,14 @@ def _build_parser() -> argparse.ArgumentParser:
     pr_body.add_argument("issue", type=int)
     pr_body.add_argument("diff", type=Path)
     pr_body.set_defaults(func=_cmd_pr_body)
+
+    commit_message = subparsers.add_parser(
+        "commit-message", help="print the commit message"
+    )
+    commit_message.add_argument("issue", type=int)
+    commit_message.add_argument("title")
+    commit_message.add_argument("coauthor", nargs="?", default="")
+    commit_message.set_defaults(func=_cmd_commit_message)
 
     parse_diff = subparsers.add_parser(
         "parse-diff", help="compare an issue attachment with dump/"
