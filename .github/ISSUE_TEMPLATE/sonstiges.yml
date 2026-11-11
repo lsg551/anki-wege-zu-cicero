@@ -1,0 +1,35 @@
+name: Sonstiges / Frage
+description: Fragen, Fehler oder Kritik, die nicht zu einer Deck-Änderung passen
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Für Korrekturen am Deck nutze bitte stattdessen
+        **„Änderung oder Korrektur vorschlagen“** – dort kannst du dein
+        Export hochladen, und der Bot prüft es automatisch.
+  - type: dropdown
+    id: art
+    attributes:
+      label: Worum geht es?
+      options:
+        - Frage
+        - Fehler / Bug
+        - Kritik oder Feedback
+        - Sonstiges
+    validations:
+      required: true
+  - type: textarea
+    id: anliegen
+    attributes:
+      label: Dein Anliegen
+      description: Beschreibe möglichst genau, worum es geht.
+    validations:
+      required: true
+  - type: textarea
+    id: umgebung
+    attributes:
+      label: Umgebung (optional)
+      description: z.B. Anki-Version, Betriebssystem, App.
+    validations:
+      required: false
