@@ -98,20 +98,6 @@
     }
   },
   {
-    "name": "Latein::Flexion::Infinitive",
-    "config": "Sprachenlernen",
-    "options": {
-      "desc": ""
-    }
-  },
-  {
-    "name": "Latein::Flexion::Tempora",
-    "config": "Sprachenlernen",
-    "options": {
-      "desc": ""
-    }
-  },
-  {
     "name": "Latein::Flexion::e-Deklination",
     "config": "Sprachenlernen",
     "options": {

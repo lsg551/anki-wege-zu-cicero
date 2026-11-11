@@ -1,11 +1,13 @@
 [
   {
+    "id": 1793795257169,
     "name": "Deklinationsklasse",
     "kind": 0,
     "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n\n.deck-name {\n\t\tmargin-top: 2em;\n\t\tfont-size: 10px;\n}",
     "sort_field": "Name",
     "fields": [
       {
+        "id": 2604024028194706573,
         "name": "Name",
         "options": {
           "description": "",
@@ -20,6 +22,7 @@
         }
       },
       {
+        "id": 4300011328372210760,
         "name": "Eigenschaften",
         "options": {
           "description": "",
@@ -34,6 +37,7 @@
         }
       },
       {
+        "id": 121010345986420676,
         "name": "Erkennungsmerkmale",
         "options": {
           "description": "",
@@ -48,6 +52,7 @@
         }
       },
       {
+        "id": -6107636647540725615,
         "name": "[Sg] Nominativ",
         "options": {
           "description": "",
@@ -62,6 +67,7 @@
         }
       },
       {
+        "id": -3768807932966152162,
         "name": "[Pl] Nominativ",
         "options": {
           "description": "",
@@ -76,6 +82,7 @@
         }
       },
       {
+        "id": -6859895325554711953,
         "name": "[Sg] Genitiv",
         "options": {
           "description": "",
@@ -90,6 +97,7 @@
         }
       },
       {
+        "id": 3379637342996020797,
         "name": "[Pl] Genitiv",
         "options": {
           "description": "",
@@ -104,6 +112,7 @@
         }
       },
       {
+        "id": -514946588598863871,
         "name": "[Sg] Dativ",
         "options": {
           "description": "",
@@ -118,6 +127,7 @@
         }
       },
       {
+        "id": -9053165861833298907,
         "name": "[Pl] Dativ",
         "options": {
           "description": "",
@@ -132,6 +142,7 @@
         }
       },
       {
+        "id": 4468334576802710924,
         "name": "[Sg] Akkusativ",
         "options": {
           "description": "",
@@ -146,6 +157,7 @@
         }
       },
       {
+        "id": 1912461542826515453,
         "name": "[Pl] Akkusativ",
         "options": {
           "description": "",
@@ -160,6 +172,7 @@
         }
       },
       {
+        "id": -4700417013871243895,
         "name": "[Sg] Ablativ",
         "options": {
           "description": "",
@@ -174,6 +187,7 @@
         }
       },
       {
+        "id": -1131484463804766516,
         "name": "[Pl] Ablativ",
         "options": {
           "description": "",
@@ -188,6 +202,7 @@
         }
       },
       {
+        "id": -3602037899969347805,
         "name": "Farbe",
         "options": {
           "description": "",
@@ -202,6 +217,7 @@
         }
       },
       {
+        "id": 3973539649846481942,
         "name": "Details",
         "options": {
           "description": "",
@@ -218,6 +234,7 @@
     ],
     "templates": [
       {
+        "id": -7860273998866136465,
         "name": "Eigenschaften",
         "qfmt": "Welche Wörter gehören typischerweise zur <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{Eigenschaften}}\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -229,6 +246,7 @@
         }
       },
       {
+        "id": 6512517005508813893,
         "name": "Erkennungsmerkmale",
         "qfmt": "Wie erkennt man Wörter der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{Erkennungsmerkmale}}\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}\n",
@@ -240,6 +258,7 @@
         }
       },
       {
+        "id": 3119606646484209572,
         "name": "Singular alle",
         "qfmt": "Wie lauten die Endungen im Singular der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\nNom: <i>{{[Sg] Nominativ}}</i><br>\nGen: <i>{{[Sg] Genitiv}}</i><br>\nDat: <i>{{[Sg] Dativ}}</i><br>\nAkk: <i>{{[Sg] Akkusativ}}</i><br>\nAbl: <i>{{[Sg] Ablativ}}</i><br<\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -251,6 +270,7 @@
         }
       },
       {
+        "id": -965576509273914303,
         "name": "Plural alle",
         "qfmt": "Wie lauten die Endungen im Plural der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\nNom: <i>{{[Pl] Nominativ}}</i><br>\nGen: <i>{{[Pl] Genitiv}}</i><br>\nDat: <i>{{[Pl] Dativ}}</i><br>\nAkk: <i>{{[Pl] Akkusativ}}</i><br>\nAbl: <i>{{[Pl] Ablativ}}</i><br<\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -262,6 +282,7 @@
         }
       },
       {
+        "id": 4784460367075036732,
         "name": "Nominativ",
         "qfmt": "Wie lauten die Endungen im Nominativ der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{[Sg] Nominativ}}, {{[Pl] Nominativ}} \n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -273,6 +294,7 @@
         }
       },
       {
+        "id": -3090444795911856062,
         "name": "Genitiv",
         "qfmt": "Wie lauten die Endungen im Genitiv der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{[Sg] Genitiv}}, {{[Pl] Genitiv}} \n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -284,6 +306,7 @@
         }
       },
       {
+        "id": 9192037999469233748,
         "name": "Dativ",
         "qfmt": "Wie lauten die Endungen im Dativ der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{[Sg] Dativ}}, {{[Pl] Dativ}} \n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -295,6 +318,7 @@
         }
       },
       {
+        "id": 8389664046537446037,
         "name": "Akkusativ",
         "qfmt": "Wie lauten die Endungen im Akkusativ der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{[Sg] Akkusativ}}, {{[Pl] Akkusativ}} \n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -306,6 +330,7 @@
         }
       },
       {
+        "id": -2853250924200404356,
         "name": "Ablativ",
         "qfmt": "Wie lauten die Endungen im Ablativ der <span style=\"color: {{Farbe}};\">{{Name}}</span>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n{{[Sg] Ablativ}}, {{[Pl] Ablativ}} \n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -317,6 +342,7 @@
         }
       },
       {
+        "id": 8164480328650530113,
         "name": "Sg. Nom. erfragen",
         "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Sg] Nominativ}}</i>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Sg] Nominativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -328,6 +354,7 @@
         }
       },
       {
+        "id": -528042541528374945,
         "name": "Pl. Nom. erfragen",
         "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Pl] Nominativ}}</i>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Pl] Nominativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -339,6 +366,7 @@
         }
       },
       {
+        "id": -7878766402209044115,
         "name": "Sg. Gen. erfragen",
         "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Sg] Genitiv}}</i>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Sg] Genitiv}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -350,6 +378,7 @@
         }
       },
       {
+        "id": -5810327896724365718,
         "name": "Pl. Gen. erfragen",
         "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Pl] Genitiv}}</i>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Pl] Genitiv}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -361,6 +390,7 @@
         }
       },
       {
+        "id": -334141145017202009,
         "name": "Sg. Dat. erfragen",
         "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Sg] Dativ}}</i>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Sg] Dativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -372,6 +402,7 @@
         }
       },
       {
+        "id": -3642787058248338994,
         "name": "Pl. Dat. erfragen",
         "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Pl] Dativ}}</i>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Pl] Dativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -383,6 +414,7 @@
         }
       },
       {
+        "id": 4355807397828206663,
         "name": "Sg. Akk. erfragen",
         "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Sg] Akkusativ}}</i>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Sg] Akkusativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -394,6 +426,7 @@
         }
       },
       {
+        "id": -5004785398369565256,
         "name": "Pl. Akk. erfragen",
         "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Pl] Akkusativ}}</i>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Pl] Akkusativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -405,6 +438,7 @@
         }
       },
       {
+        "id": 7770315205658847567,
         "name": "Sg. Abl. erfragen",
         "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Sg] Ablativ}}</i>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Sg] Ablativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -416,6 +450,7 @@
         }
       },
       {
+        "id": 8993997794406679299,
         "name": "Pl. Abl. erfragen",
         "qfmt": "Welcher Kasus der <span style=\"color: {{Farbe}};\">{{Name}}</span> ist <i>{{[Pl] Ablativ}}</i>?\n",
         "afmt": "{{FrontSide}}\n\n<br/><hr/><br/>\n\n<div id=\"result\"></div>\n\n<script>\nconst target = `{{[Pl] Ablativ}}`;\n\nconst fields = {\n    \"Nom. Sg.\": `{{[Sg] Nominativ}}`,\n    \"Nom. Pl.\": `{{[Pl] Nominativ}}`,\n    \"Gen. Sg.\": `{{[Sg] Genitiv}}`,\n    \"Gen. Pl.\": `{{[Pl] Genitiv}}`,\n    \"Dat. Sg.\": `{{[Sg] Dativ}}`,\n    \"Dat. Pl.\": `{{[Pl] Dativ}}`,\n    \"Akk. Sg.\": `{{[Sg] Akkusativ}}`,\n    \"Akk. Pl.\": `{{[Pl] Akkusativ}}`,\n    \"Abl. Sg.\": `{{[Sg] Ablativ}}`,\n    \"Abl. Pl.\": `{{[Pl] Ablativ}}`\n};\n\nconst matches = Object.entries(fields)\n    .filter(([name, value]) => value === target);\n\nconst html = matches\n    .map(([name, value]) => `<li>${name}</li>`)\n    .join(\"\");\n\ndocument.getElementById(\"result\").innerHTML = `<ul>${html}</ul>`;\n</script>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -435,12 +470,14 @@
     }
   },
   {
+    "id": 1736782822035,
     "name": "Frage-Antwort",
     "kind": 0,
     "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n\n.deck-name {\n\t\tmargin-top: 2em;\n\t\tfont-size: 10px;\n}",
     "sort_field": "Frage",
     "fields": [
       {
+        "id": 2604024028194706573,
         "name": "Frage",
         "options": {
           "description": "",
@@ -455,6 +492,7 @@
         }
       },
       {
+        "id": -6107636647540725615,
         "name": "Antwort",
         "options": {
           "description": "",
@@ -469,6 +507,7 @@
         }
       },
       {
+        "id": -3768807932966152162,
         "name": "Details",
         "options": {
           "description": "",
@@ -485,6 +524,7 @@
     ],
     "templates": [
       {
+        "id": -7860273998866136465,
         "name": "Card 1",
         "qfmt": "{{Frage}}\n\n<div class=\"deck-name\">\n\t{{Deck}}\n</div>",
         "afmt": "<div style=\"text-align: start;\">\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div style=\"text-align: start;\">\n<b>Antwort</b>: <br/><br/>\n{{Antwort}}\n</div>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -504,12 +544,14 @@
     }
   },
   {
+    "id": 1778578951516,
     "name": "Vokabeln (Standard)",
     "kind": 0,
     "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
     "sort_field": "Lexem",
     "fields": [
       {
+        "id": 3142176558899682615,
         "name": "Lexem",
         "options": {
           "description": "",
@@ -524,6 +566,7 @@
         }
       },
       {
+        "id": -8842798019515581065,
         "name": "Lexikalische Kategorie",
         "options": {
           "description": "",
@@ -538,6 +581,7 @@
         }
       },
       {
+        "id": 40789535164059065,
         "name": "Bedeutung",
         "options": {
           "description": "",
@@ -552,6 +596,7 @@
         }
       },
       {
+        "id": 194482635709275558,
         "name": "Details",
         "options": {
           "description": "",
@@ -568,6 +613,7 @@
     ],
     "templates": [
       {
+        "id": -8433749924590432471,
         "name": "Card 1",
         "qfmt": "{{Lexem}}\n\n{{#Lexikalische Kategorie}}\n<p style=\"font-size:10pt;\">\n({{Lexikalische Kategorie}})\n</p>\n{{/Lexikalische Kategorie}}",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -587,12 +633,14 @@
     }
   },
   {
+    "id": 1792583947445,
     "name": "Vokabeln (Substantiv)",
     "kind": 0,
     "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
     "sort_field": "Nominativ Sg",
     "fields": [
       {
+        "id": 2455137233933047108,
         "name": "Nominativ Sg",
         "options": {
           "description": "",
@@ -607,6 +655,7 @@
         }
       },
       {
+        "id": 5659666065757714452,
         "name": "Genitiv Sg",
         "options": {
           "description": "",
@@ -621,6 +670,7 @@
         }
       },
       {
+        "id": 1453888667749310741,
         "name": "Genus",
         "options": {
           "description": "",
@@ -635,6 +685,7 @@
         }
       },
       {
+        "id": -3869502974072387292,
         "name": "Deklinationsklasse",
         "options": {
           "description": "",
@@ -649,6 +700,7 @@
         }
       },
       {
+        "id": -5576868489907517863,
         "name": "Bedeutung",
         "options": {
           "description": "",
@@ -663,6 +715,7 @@
         }
       },
       {
+        "id": 8084054405350707766,
         "name": "Details",
         "options": {
           "description": "",
@@ -679,6 +732,7 @@
     ],
     "templates": [
       {
+        "id": 3688411941161842272,
         "name": "Bedeutung erfragen",
         "qfmt": "Was bedeutet <i>{{Nominativ Sg}}, {{Genitiv Sg}}</i> ({{Genus}})?",
         "afmt": "{{FrontSide}}\n\n<hr/>\n\n{{Bedeutung}}\n\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -690,6 +744,7 @@
         }
       },
       {
+        "id": -5511706595288803978,
         "name": "Genus erfragen",
         "qfmt": "Welches Genus ist <i>{{Nominativ Sg}}, {{Genitiv Sg}}</i>?",
         "afmt": "{{FrontSide}}\n\n<hr/>\n\n{{Genus}}\n",
@@ -701,6 +756,7 @@
         }
       },
       {
+        "id": -2853455018410570207,
         "name": "Deklinationsklasse erfragen",
         "qfmt": "Zu welcher Deklinationsklasse gehört <i>{{Nominativ Sg}}, {{Genitiv Sg}}</i> ({{Genus}})?",
         "afmt": "{{FrontSide}}\n\n<hr/>\n\n{{Deklinationsklasse}}\n",
@@ -712,8 +768,9 @@
         }
       },
       {
+        "id": 8958297534441016120,
         "name": "Genitiv erfragen",
-        "qfmt": "Wie lautet der Genitiv Sg. zu <i>{{Nominativ Sg}}}</i> ({{Genus}})?",
+        "qfmt": "Wie lautet der Genitiv Sg. zu <i>{{Nominativ Sg}}</i> ({{Genus}})?",
         "afmt": "{{FrontSide}}\n\n<hr/>\n\n<i>{{Genitiv Sg}}</i>\n\n<br><br>\n\n{{Deklinationsklasse}}",
         "options": {
           "bafmt": "",
@@ -731,12 +788,14 @@
     }
   },
   {
+    "id": 1784619433722,
     "name": "Vokabeln (Verb)",
     "kind": 0,
     "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
     "sort_field": "Präsens 1.Sg. Ind.Akt.",
     "fields": [
       {
+        "id": 7299783538586589622,
         "name": "Infinitiv Präsens Akt.",
         "options": {
           "description": "",
@@ -751,6 +810,7 @@
         }
       },
       {
+        "id": 3142176558899682615,
         "name": "Präsens 1.Sg. Ind.Akt.",
         "options": {
           "description": "",
@@ -765,6 +825,7 @@
         }
       },
       {
+        "id": -279587459864824695,
         "name": "Perfekt 1.Sg. Ind.Akt.",
         "options": {
           "description": "",
@@ -779,6 +840,7 @@
         }
       },
       {
+        "id": -3638621634979271276,
         "name": "PPP (Supinum)",
         "options": {
           "description": "",
@@ -793,6 +855,7 @@
         }
       },
       {
+        "id": 4165911646834571412,
         "name": "Konjugationsklasse",
         "options": {
           "description": "",
@@ -807,6 +870,7 @@
         }
       },
       {
+        "id": 40789535164059065,
         "name": "Bedeutung",
         "options": {
           "description": "",
@@ -821,6 +885,7 @@
         }
       },
       {
+        "id": 194482635709275558,
         "name": "Details",
         "options": {
           "description": "",
@@ -837,6 +902,7 @@
     ],
     "templates": [
       {
+        "id": -8433749924590432471,
         "name": "Lexikoneintrag",
         "qfmt": "Was bedeutet das Verb?<br>\n\n<i>\n{{Infinitiv Präsens Akt.}},\n{{Präsens 1.Sg. Ind.Akt.}},\n{{Perfekt 1.Sg. Ind.Akt.}},\n{{PPP (Supinum)}}\n</i>",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -848,6 +914,7 @@
         }
       },
       {
+        "id": 7294179209906809108,
         "name": "Konjugationsklasse",
         "qfmt": "Welche Konjugationsklasse hat das Verb?<br>\n\n<i>\n{{Präsens 1.Sg. Ind.Akt.}},\n{{Infinitiv Präsens Akt.}},\n{{Perfekt 1.Sg. Ind.Akt.}},\n{{PPP (Supinum)}}\n</i>",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<b>{{Konjugationsklasse}}</b>\n\n<div class=\"muted\">\n{{Bedeutung}}\n</div>\n\n<style>\ndiv.muted {\n  margin-top: 15px;\n\tfont-size: 1rem;\n}\n</style>\n",
@@ -859,6 +926,7 @@
         }
       },
       {
+        "id": 7803609800569927579,
         "name": "Nur Infinitiv",
         "qfmt": "Was bedeutet das Verb? Welche Form hat es?<br>\n\n<i>\n{{Infinitiv Präsens Akt.}}\n</i>",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n<br>\n<div>\nForm: <i>Infinitiv</i>\n</div>",
@@ -870,6 +938,7 @@
         }
       },
       {
+        "id": -3070146025364693872,
         "name": "Nur Präsens",
         "qfmt": "Was bedeutet das Verb? Welche Form hat es?<br>\n\n<i>\n{{Präsens 1.Sg. Ind.Akt.}}\n</i>",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n<br>\n<div>\nForm: <i>Präsens 1.Sg. Ind.Akt.</i>\n</div>",
@@ -881,6 +950,7 @@
         }
       },
       {
+        "id": -825264525895150855,
         "name": "Nur Perfekt",
         "qfmt": "Was bedeutet das Verb? Welche Form hat es?<br>\n\n<i>\n{{Perfekt 1.Sg. Ind.Akt.}}\n</i>",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n<br>\n<div>\nForm: <i>Perfekt 1.Sg. Ind.Akt.</i>\n</div>",
@@ -892,6 +962,7 @@
         }
       },
       {
+        "id": -5376772954225559860,
         "name": "Nur PPP",
         "qfmt": "Was bedeutet das Verb? Welche Form hat es?<br>\n\n<i>\n{{PPP (Supinum)}}\n</i>",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n<br>\n<div>\nForm: <i>Supinum (~PPP)</i>\n</div>",
@@ -903,6 +974,7 @@
         }
       },
       {
+        "id": -4798943216136961679,
         "name": "Lexioneintrag aufzählen",
         "qfmt": "Wie lautet der Lexioneintrag zu folgendem Infinitiv?<br>\n\n<i>{{Infinitiv Präsens Akt.}}</i>",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n<br>\n<div>\n<ul>\n<li>Infinitiv: <i>{{Infinitiv Präsens Akt.}}</i></li>\n<li>Präsens: <i>{{Präsens 1.Sg. Ind.Akt.}}</i></li>\n<li>Perfekt: <i>{{Perfekt 1.Sg. Ind.Akt.}}</i></li>\n<li>PPP: <i>{{PPP (Supinum)}}</i></li>\n</ul>\n\nJeweils 1. Sg. Indikativ Aktiv\n</div>",
@@ -922,12 +994,14 @@
     }
   },
   {
+    "id": 1784619737334,
     "name": "Vokabeln (Verb, unregelmäßig)",
     "kind": 0,
     "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
     "sort_field": "Infinitiv",
     "fields": [
       {
+        "id": -2386985954932577230,
         "name": "Infinitiv",
         "options": {
           "description": "",
@@ -942,6 +1016,7 @@
         }
       },
       {
+        "id": 1282907094857763243,
         "name": "Zeitform",
         "options": {
           "description": "",
@@ -956,6 +1031,7 @@
         }
       },
       {
+        "id": 7534535231747251046,
         "name": "1.Sg",
         "options": {
           "description": "",
@@ -970,6 +1046,7 @@
         }
       },
       {
+        "id": -2887573840140130528,
         "name": "2.Sg",
         "options": {
           "description": "",
@@ -984,6 +1061,7 @@
         }
       },
       {
+        "id": 3290528096364717954,
         "name": "3.Sg",
         "options": {
           "description": "",
@@ -998,6 +1076,7 @@
         }
       },
       {
+        "id": 3910558753233783912,
         "name": "1.Pl",
         "options": {
           "description": "",
@@ -1012,6 +1091,7 @@
         }
       },
       {
+        "id": -6523535497080724012,
         "name": "2.Pl",
         "options": {
           "description": "",
@@ -1026,6 +1106,7 @@
         }
       },
       {
+        "id": 7092773444818694780,
         "name": "3.Pl",
         "options": {
           "description": "",
@@ -1040,6 +1121,7 @@
         }
       },
       {
+        "id": 40789535164059065,
         "name": "Bedeutung",
         "options": {
           "description": "",
@@ -1054,6 +1136,7 @@
         }
       },
       {
+        "id": 194482635709275558,
         "name": "Details",
         "options": {
           "description": "",
@@ -1070,6 +1153,7 @@
     ],
     "templates": [
       {
+        "id": -8433749924590432471,
         "name": "Infinitiv / Bedeutung",
         "qfmt": "Was bedeutet das Verb?\n<br>\n\n<i>{{Infinitiv}}</i>",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Bedeutung}}\n</div>\n\n{{#Details}}\n<br/><hr/><br/>\n<div style=\"text-align: start;\">\n<b>Details</b>: <br/><br/>\n{{Details}}\n</div>\n{{/Details}}",
@@ -1081,6 +1165,7 @@
         }
       },
       {
+        "id": -5777817984977675751,
         "name": "Alle Formen",
         "qfmt": "Wie lauten die Formen von <b><i>{{Infinitiv}}</i></b> im <i>{{Zeitform}}</i>?",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n<div>\n{{Infinitiv}} ~ {{Bedeutung}}\n</div>\n\n<br>\n<table>\n\t<tr>\n\t\t<td></td>\n\t\t<td>Sg.</td>\n\t\t<td>Pl.</td>\n  </tr>\n\t<tr>\n\t\t<td>1.</td>\n\t\t<td>{{1.Sg}}</td>\n\t\t<td>{{1.Pl}}</td>\n\t</tr>\n\t<tr>\n\t\t<td>2.</td>\n\t\t<td>{{2.Sg}}</td>\n\t\t<td>{{2.Pl}}</td>\n\t</tr>\n\t<tr>\n\t\t<td>3.</td>\n\t\t<td>{{3.Sg}}</td>\n\t\t<td>{{3.Pl}}</td>\n\t</tr>\n</table>\n\n<style>\ntable, tr, td {\n\tborder: 1px solid;\n\tborder-collapse: collapse;\n\tpadding: 5px;\n}\n</style>",
@@ -1092,6 +1177,7 @@
         }
       },
       {
+        "id": -859716215632029619,
         "name": "1.Sg",
         "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{1.Sg}}</i></b>?",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>1.Sg</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
@@ -1103,6 +1189,7 @@
         }
       },
       {
+        "id": -5193104093115216430,
         "name": "2.Sg",
         "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{2.Sg}}</i></b>?",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>2.Sg</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
@@ -1114,6 +1201,7 @@
         }
       },
       {
+        "id": -6624039456307821535,
         "name": "3.Sg",
         "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{3.Sg}}</i></b>?",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>3.Sg</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
@@ -1125,6 +1213,7 @@
         }
       },
       {
+        "id": -8632252013487828641,
         "name": "1.Pl",
         "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{1.Pl}}</i></b>?",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>1.Pl</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
@@ -1136,6 +1225,7 @@
         }
       },
       {
+        "id": -4184890677095111655,
         "name": "2.Pl",
         "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{2.Pl}}</i></b>?",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>2.Pl</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
@@ -1147,6 +1237,7 @@
         }
       },
       {
+        "id": -3022136650074679515,
         "name": "3.Pl",
         "qfmt": "Wie lauten die (1) Bedeutung und (2) Form von <b><i>{{3.Pl}}</i></b>?",
         "afmt": "<div>\n{{FrontSide}}\n</div>\n\n<br/><hr/><br/>\n\n(2) Form von <i>{{Infinitiv}}</i> in <u>3.Pl</u> in <u>{{Zeitform}}</u>  mit (1) Bedeutung:\n<br><br>\n<div>\n{{Bedeutung}}\n</div>\n",
