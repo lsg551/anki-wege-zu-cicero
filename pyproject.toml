@@ -10,7 +10,7 @@ requires-python = ">=3.13"
 # Pinned to the attested release wheel: the same artifact users install.
 # Bump by editing the URL, then run `uv lock`.
 dependencies = [
-    "anki-tools @ https://github.com/lsg551/anki-tools/releases/download/v0.1.0-beta.1/anki_tools-0.1.0b1-py3-none-any.whl",
+    "anki-tools @ https://github.com/lsg551/anki-tools/releases/download/v0.1.0-beta.2/anki_tools-0.1.0b2-py3-none-any.whl",
 ]
 
 [tool.uv]

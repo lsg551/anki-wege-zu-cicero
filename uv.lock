@@ -26,14 +26,14 @@ wheels = [
 
 [[package]]
 name = "anki-tools"
-version = "0.1.0b1"
-source = { url = "https://github.com/lsg551/anki-tools/releases/download/v0.1.0-beta.1/anki_tools-0.1.0b1-py3-none-any.whl" }
+version = "0.1.0b2"
+source = { url = "https://github.com/lsg551/anki-tools/releases/download/v0.1.0-beta.2/anki_tools-0.1.0b2-py3-none-any.whl" }
 dependencies = [
     { name = "anki" },
     { name = "msgspec" },
 ]
 wheels = [
-    { url = "https://github.com/lsg551/anki-tools/releases/download/v0.1.0-beta.1/anki_tools-0.1.0b1-py3-none-any.whl", hash = "sha256:1f1f7dbd8926e996cab8c0746c7b84add413b7ed0c5f42c4f8e9197f3265490c" },
+    { url = "https://github.com/lsg551/anki-tools/releases/download/v0.1.0-beta.2/anki_tools-0.1.0b2-py3-none-any.whl", hash = "sha256:547c12fdf52c9fdb215225a926401a334fe68d41e7ff1fafe185c533c39b7a89" },
 ]
 
 [package.metadata]
@@ -58,7 +58,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "anki-tools", url = "https://github.com/lsg551/anki-tools/releases/download/v0.1.0-beta.1/anki_tools-0.1.0b1-py3-none-any.whl" }]
+requires-dist = [{ name = "anki-tools", url = "https://github.com/lsg551/anki-tools/releases/download/v0.1.0-beta.2/anki_tools-0.1.0b2-py3-none-any.whl" }]
 
 [package.metadata.requires-dev]
 dev = [
