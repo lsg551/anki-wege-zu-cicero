@@ -43,6 +43,10 @@ class NotAPackageError(IssueError):
     """The attachment is not an Anki package."""
 
 
+class NoAttachmentError(IssueError):
+    """The issue body carries no attachment link."""
+
+
 def find_attachment_url(body: str) -> str | None:
     """Return the first attachment URL in *body*, or None.
 
@@ -86,6 +90,24 @@ def fetch_attachment(url: str, dest: Path) -> None:
     """Download *url* to *dest*."""
     with urllib.request.urlopen(url, timeout=60) as response:
         dest.write_bytes(response.read())
+
+
+def _fetch_apkg(body: str, workdir: Path) -> Path:
+    """Download the issue attachment and return it as a package path.
+
+    Raises:
+        NoAttachmentError: if *body* carries no attachment link.
+        NotAPackageError: if the attachment is not an Anki package.
+    """
+    url = find_attachment_url(body)
+    if url is None:
+        raise NoAttachmentError("no attachment link found")
+    workdir.mkdir(parents=True, exist_ok=True)
+    attachment = workdir / "attachment"
+    apkg = workdir / "issue.apkg"
+    fetch_attachment(url, attachment)
+    normalize_attachment(attachment, apkg)
+    return apkg
 
 
 def run(command: list[str]) -> subprocess.CompletedProcess[str]:
@@ -261,24 +283,19 @@ def parse_diff(body: str, workdir: Path) -> None:
     summary_path = workdir / "summary.txt"
     diff_path.write_text("")
     summary_path.write_text("")
-    url = find_attachment_url(body)
-    if url is None:
+    try:
+        apkg = _fetch_apkg(body, workdir)
+    except NoAttachmentError:
         error_path.write_text("Kein Anhang gefunden.")
         code = 2
+    except NotAPackageError:
+        error_path.write_text("Die Datei ist kein Anki-Deck.")
+        code = 2
+    except OSError as exc:
+        error_path.write_text(f"Der Anhang konnte nicht geladen werden: {exc}")
+        code = 2
     else:
-        attachment = workdir / "attachment"
-        apkg = workdir / "issue.apkg"
-        try:
-            fetch_attachment(url, attachment)
-            normalize_attachment(attachment, apkg)
-        except NotAPackageError:
-            error_path.write_text("Die Datei ist kein Anki-Deck.")
-            code = 2
-        except OSError as exc:
-            error_path.write_text(f"Der Anhang konnte nicht geladen werden: {exc}")
-            code = 2
-        else:
-            code = diff_against_dump(apkg, diff_path, error_path, summary_path)
+        code = diff_against_dump(apkg, diff_path, error_path, summary_path)
     (workdir / "code.txt").write_text(f"{code}\n")
 
 
@@ -300,7 +317,14 @@ def artifact_url(repo: str, run_id: str, name: str) -> str | None:
 
 
 def post(
-    code: int, diff: str, error: str, summary: str, issue: int, repo: str, run_id: str
+    *,
+    code: int,
+    diff: str,
+    error: str,
+    summary: str,
+    issue: int,
+    repo: str,
+    run_id: str,
 ) -> None:
     """Post the comparison result, linking the full diff when truncated."""
     full_url = None
@@ -333,7 +357,7 @@ def render_apply_result(
             "Ich konnte den Vorschlag nicht übernehmen:",
             "",
             "```",
-            (text or f"Details im CI-Lauf: {run_url}")[:4000],
+            (text or f"Details im CI-Lauf: {run_url}")[:ERROR_LIMIT],
             "```",
         ]
     elif not changed:
@@ -439,14 +463,7 @@ def parse_apply(body: str, workdir: Path, issue: int) -> bool:
     Raises:
         IssueError: if there is no attachment or anki-tools fails.
     """
-    url = find_attachment_url(body)
-    if url is None:
-        raise IssueError("no attachment link found")
-    workdir.mkdir(parents=True, exist_ok=True)
-    attachment = workdir / "attachment"
-    apkg = workdir / "issue.apkg"
-    fetch_attachment(url, attachment)
-    normalize_attachment(attachment, apkg)
+    apkg = _fetch_apkg(body, workdir)
 
     dump = workdir / "dump"
     commands = [
@@ -568,13 +585,13 @@ def _cmd_ack(_args: argparse.Namespace) -> int:
 def _cmd_post(args: argparse.Namespace) -> int:
     """Post the comparison result as an issue comment."""
     post(
-        args.code,
-        args.diff.read_text(),
-        args.error.read_text(),
-        args.summary.read_text(),
-        args.issue,
-        args.repo,
-        args.run_id,
+        code=args.code,
+        diff=args.diff.read_text(),
+        error=args.error.read_text(),
+        summary=args.summary.read_text(),
+        issue=args.issue,
+        repo=args.repo,
+        run_id=args.run_id,
     )
     return 0
 

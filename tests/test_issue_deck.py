@@ -377,7 +377,15 @@ def test_artifact_url_missing(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_post_links_full_diff(monkeypatch: pytest.MonkeyPatch) -> None:
     captured: dict[str, str] = {}
     _patch_gh(monkeypatch, artifact="42", capture=captured)
-    issue_deck.post(1, "x" * (issue_deck.DIFF_LIMIT + 1), "", "", 7, "o/r", "9")
+    issue_deck.post(
+        code=1,
+        diff="x" * (issue_deck.DIFF_LIMIT + 1),
+        error="",
+        summary="",
+        issue=7,
+        repo="o/r",
+        run_id="9",
+    )
     assert "https://github.com/o/r/actions/runs/9/artifacts/42" in captured["body"]
 
 
@@ -393,7 +401,9 @@ def test_post_short_diff_skips_artifact_lookup(
         return subprocess.CompletedProcess(command, 0, "https://example/comment", "")
 
     monkeypatch.setattr(issue_deck, "run", fake)
-    issue_deck.post(1, "-x\n+y\n", "", "", 7, "o/r", "9")
+    issue_deck.post(
+        code=1, diff="-x\n+y\n", error="", summary="", issue=7, repo="o/r", run_id="9"
+    )
     assert not any("/artifacts" in call for call in calls)
 
 
@@ -407,7 +417,9 @@ def test_post_updates_existing_comment(monkeypatch: pytest.MonkeyPatch) -> None:
         return subprocess.CompletedProcess(command, 0, "https://example/comment", "")
 
     monkeypatch.setattr(issue_deck, "run", fake)
-    issue_deck.post(2, "", "boom", "", 7, "o/r", "9")
+    issue_deck.post(
+        code=2, diff="", error="boom", summary="", issue=7, repo="o/r", run_id="9"
+    )
     assert any("PATCH" in call and "/comments/456" in call for call in calls)
 
 
