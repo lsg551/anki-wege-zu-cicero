@@ -28,55 +28,35 @@ daher besser die Releases nutzen!)
 ### Upgrade auf neuere Version
 
 Wenn eine `.apkg`-Datei bereits importiert, nun aber mit einer neuen Version
-aktualisiert werden soll, die [Installationsschritte](#installation) einfach
-ein weiteres Mal durchführen. Anki aktualisiert das alte Deck automatisch.
+aktualisiert werden soll, die [Installationsschritte](#installation) ein
+weiteres Mal durchführen. Anki aktualisiert bestehende Notizen, Karteninhalte
+und Tags.
 
-## Angaben zum Buch
+Nicht jede Änderung wird beim erneuten Importieren übernommen. Anki kann Import
+nur ergänzen:
 
-```
-Titel   :  Wege zu Ciceo. Per Aspera ad Astra. Intensivkurs für Studierende zur Vorbereitung auf die Cicerolektüre
-Autor   :  Glaesser, Roland
-Verlag  :  WINTER, Heidelberg
-Auflage :  3., überarbeitete und erweiterte
-Jahr    :  2012
-ISBN    :  978-3-8253-5985-0
-```
-
-> [!INFO]
-> Mir liegt nur die dritte Auflage vor (2012, ISBN 978-3-8253-5985-0).
-> Inzwischen ist jedoch eine vierte erschienen, deren Inhalt entsprechend nicht
-> in die Karteikarten mit einfließen konnte. Angeblich unterscheiden sich beide
-> Auflagen aber nur marginal und für viele Kurse irrelevant.
->
-> Ergänzungen und Beiträge hierzu sind willkommen; siehe
-> [Contributing](./CONTRIBUTING.md) für Instruktionen.
+- Ein neues Feld oder Template erreicht das Deck nur, wenn beim Import das
+  Zusammenführen der Notiztypen und das Aktualisieren der Notizen aktiviert
+  werden! (Lokale Änderungen werden dabei überschrieben, der Lernfortschritt
+  bleibt erhalten.)
+- Ein entferntes oder umsortiertes Feld bzw. Template, eine in ein anderes Deck
+  verschobene Karte und geänderte Deck-Presets erreichen ein bestehendes Deck
+  NICHT.
 
 ## Inhalt & Aufbau
 
-Das Haupt-Deck <tt>Latein</tt> ist in Subdecks nach Lektion gegliedert:
-
-```
-Latein
-┣━ 01. Lectio Prima
-┣━ 02. Lectio Secunda
-┣━ … 
-┗━ 20. Lectio Vicesima
-```
-
+Das Haupt-Deck <tt>Latein</tt> ist in Unterdecks nach Lektion gegliedert.
 Die einzelnen Karteikarten der Lektionen enthalten neben den Vokabeln[^vocab]
 der einzelnen Lektionen auch Beispiele, Eselsbrücken (z.B. Lehnwörter) oder
-andere Angaben.
+andere Angaben. Jede Lektion enthält dabei auch die für sie relevanten
+Grammatikfragen sowie Karteikarten, die das Flexionssystem üben.
+
+Tipp: Diese Nicht-Vokabelkarteikarten kann man mittels Tags filtern! Zum
+Beispiel `Latein::Grammatik` oder `Latein::Flexion::a-Deklination`.
 
 [^vocab]: Inklusive derer, die nicht im Vokabelverzeichnis der Lektionen
 aufgeführt sind, sondern nur unterhalb der Lektionstexte (oder im alphabetischen
 Vokabelberzeichnis).
-
-Jede Lektion enthält dabei auch die für sie relevanten Grammatikfragen sowie
-Karteikarten, die das Flexionssystem üben.
-
-> [!TIP]
-> Diese Nicht-Vokabelkarteikarten kann man mittels Tags filtern! Zum Beispiel
-> `Latein::Grammatik` oder `Latein::Flexion::a-Deklination`.
 
 > [!WARNING]
 > Die Karteikarten wurden über mehrere Semester angefertigt. Einige Neuerungen
@@ -219,6 +199,27 @@ Von diesem System wird aktiv Gebrauch gemacht:
   Diakritika. D.h. <tt>a</tt> und <tt>ā</tt> sind zwei distinkte Zeichen. Beim
   Suchen kann dies kontraintuitiv sein, wenn <tt>advoco</tt> <tt>advocō</tt>
   nicht findet.
+- Nicht alle Änderungen werden bei einem erneuten Export übernomen. Siehe
+  [*Upgrade auf neuere Version*](#upgrade-auf-neuere-version).
+
+## Angaben zum Buch
+
+```
+Titel   :  Wege zu Ciceo. Per Aspera ad Astra. Intensivkurs für Studierende zur Vorbereitung auf die Cicerolektüre
+Autor   :  Glaesser, Roland
+Verlag  :  WINTER, Heidelberg
+Auflage :  3., überarbeitete und erweiterte
+Jahr    :  2012
+ISBN    :  978-3-8253-5985-0
+```
+
+Mir liegt nur die dritte Auflage vor (2012, ISBN 978-3-8253-5985-0).
+Inzwischen ist jedoch eine vierte erschienen, deren Inhalt entsprechend nicht
+in die Karteikarten mit einfließen konnte. Angeblich unterscheiden sich beide
+Auflagen aber nur marginal und für viele Kurse irrelevant.
+
+Ergänzungen und Beiträge hierzu sind willkommen; siehe
+[Contributing](./CONTRIBUTING.md) für Instruktionen.
 
 ## Lizenz
 
