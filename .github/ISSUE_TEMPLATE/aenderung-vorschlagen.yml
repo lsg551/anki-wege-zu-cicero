@@ -7,15 +7,16 @@ body:
       value: |
         Danke, dass du hilfst! Exportiere bitte zuerst dein Deck aus Anki und hänge die Datei unten an.
 
-        1. In Anki das Deck **Latein** anklicken.
-        2. Auf das Zahnrad klicken: **Export**.
-        3. Diese Einstellungen übernehmen:
+        1. Importiere die aktuelle Version aus den Releases, damit dein Deck dem Stand des Repositorys entspricht.
+        2. In Anki das Deck **Latein** anklicken.
+        3. Auf das Zahnrad klicken: **Export**.
+        4. Diese Einstellungen übernehmen:
            - *Export format*: `Anki Deck Package (.apkg)`
            - *Include*: `Latein`
            - Option **Include deck presets** einschalten (Medien sind optional).
-        4. Auf **Export…** klicken.
-        5. Die Datei umbenennen, sodass sie zusätzlich auf `.zip` endet: `anki-wege-zu-cicero.apkg` → `anki-wege-zu-cicero.apkg.zip`. (GitHub akzeptiert keine `.apkg`-Dateien.)
-        6. Die umbenannte Datei unten in das Feld **Exportierte Datei** ziehen (Drag & Drop).
+        5. Auf **Export…** klicken.
+        6. Die Datei umbenennen, sodass sie zusätzlich auf `.zip` endet: `anki-wege-zu-cicero.apkg` → `anki-wege-zu-cicero.apkg.zip`. (GitHub akzeptiert keine `.apkg`-Dateien.)
+        7. Die umbenannte Datei unten in das Feld **Exportierte Datei** ziehen (Drag & Drop).
   - type: textarea
     id: beschreibung
     attributes:
@@ -35,7 +36,9 @@ body:
   - type: checkboxes
     id: export
     attributes:
-      label: Export
+      label: Voraussetzungen
       options:
+        - label: Ich habe vor der Änderung die aktuelle Version importiert.
+          required: true
         - label: Ich habe die exportierte Datei auf `.zip` umbenannt und angehängt.
           required: true
