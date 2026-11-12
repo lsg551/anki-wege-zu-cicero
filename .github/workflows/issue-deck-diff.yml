@@ -64,6 +64,7 @@ jobs:
           path: |
             ${{ runner.temp }}/diff.txt
             ${{ runner.temp }}/error.txt
+            ${{ runner.temp }}/summary.txt
             ${{ runner.temp }}/code.txt
 
   comment:
@@ -90,5 +91,6 @@ jobs:
           code=$(cat "$(find . -name code.txt -print -quit)")
           diff=$(find . -name diff.txt -print -quit)
           err=$(find . -name error.txt -print -quit)
+          summary=$(find . -name summary.txt -print -quit)
           python3 scripts/issue_deck.py post \
-            "$code" "$diff" "$err" "$ISSUE" "$REPO" "$RUN_ID"
+            "$code" "$diff" "$err" "$summary" "$ISSUE" "$REPO" "$RUN_ID"

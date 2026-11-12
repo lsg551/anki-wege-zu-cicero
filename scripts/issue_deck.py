@@ -22,6 +22,7 @@ from typing import cast
 MARKER = "<!-- anki-tools-diff -->"
 APPLY_MARKER = "<!-- anki-tools-apply -->"
 DIFF_LIMIT = 60_000
+ERROR_LIMIT = 4_000
 
 BOT_NOTE = (
     "> [!NOTE]\n"
@@ -92,18 +93,47 @@ def run(command: list[str]) -> subprocess.CompletedProcess[str]:
     return subprocess.run(command, capture_output=True, text=True, check=False)
 
 
-def diff_against_dump(apkg: Path, diff: Path, error: Path) -> int:
-    """Write the ``anki-tools diff`` output for *apkg* to *diff* and *error*."""
+def diff_against_dump(apkg: Path, diff: Path, error: Path, summary: Path) -> int:
+    """Write the comparison of *apkg* with ``dump/`` to three files.
+
+    *diff* holds the diff, *error* the re-import notes, and *summary* the
+    markdown change table. *summary* is empty when the two match.
+    """
     result = run(
         ["anki-tools", "diff", "dump", str(apkg), "--with-deck-configs", "--no-media"]
     )
     diff.write_text(_relabel_diff(result.stdout))
     error.write_text(result.stderr)
+    summary.write_text("")
+    if result.returncode == 1:
+        summary.write_text(_summary_table(apkg, "--with-deck-configs", "--no-media"))
     return result.returncode
 
 
+def _summary_table(source: Path, *flags: str) -> str:
+    """Return the markdown change table for *source* against ``dump/``."""
+    result = run(
+        [
+            "anki-tools",
+            "diff",
+            "--summary",
+            "-f",
+            "markdown",
+            "dump",
+            str(source),
+            *flags,
+        ]
+    )
+    return result.stdout
+
+
 def render_comment(
-    code: int, diff: str, error: str, full_url: str | None = None
+    code: int,
+    diff: str,
+    error: str,
+    full_url: str | None = None,
+    *,
+    summary: str = "",
 ) -> str:
     """Return the issue comment body for a comparison result."""
     lines = [MARKER, BOT_NOTE, "", "### Deck-Vorschlag", ""]
@@ -131,18 +161,38 @@ def render_comment(
                 )
             else:
                 lines.append("Der Diff ist gekürzt.")
+        notes = _reimport_notes(error)
+        if notes:
+            lines += [
+                "",
+                "> [!WARNING]",
+                "> Ein Re-Import kann nicht alle Änderungen übernehmen:",
+                ">",
+                *[f"> - {note}" for note in notes],
+            ]
+        if summary.strip():
+            lines += ["", summary.rstrip("\n")]
     else:
         lines += [
             "Der Export konnte nicht gelesen werden:",
             "",
             "```",
-            error[:4000].rstrip("\n"),
+            error[:ERROR_LIMIT].rstrip("\n"),
             "```",
             "",
             "Bitte die exportierte <code>.apkg</code>-Datei in <code>.zip</code> "
             "umbenennen und erneut anhängen.",
         ]
     return "\n".join(lines) + "\n"
+
+
+def _reimport_notes(error: str) -> list[str]:
+    """Return the re-import notes from *error*, without the tool prefix."""
+    return [
+        line.removeprefix("anki-tools: ")
+        for line in error[:ERROR_LIMIT].strip().splitlines()
+        if line.strip()
+    ]
 
 
 def render_ack() -> str:
@@ -156,7 +206,7 @@ def render_ack() -> str:
     return f"{MARKER}\n{note}\n"
 
 
-def render_pr_body(issue: int, diff: str) -> str:
+def render_pr_body(issue: int, diff: str, summary: str = "") -> str:
     """Return the pull request body for an applied issue."""
     lines = [
         f"Übernimmt die an #{issue} angehängte `.apkg`-Datei.",
@@ -171,6 +221,8 @@ def render_pr_body(issue: int, diff: str) -> str:
     else:
         lines.append(diff.rstrip("\n"))
     lines += ["", "</details>"]
+    if summary.strip():
+        lines += ["", summary.rstrip("\n")]
     return "\n".join(lines) + "\n"
 
 
@@ -199,13 +251,16 @@ def render_commit_message(issue: int, title: str, coauthor: str = "") -> str:
 def parse_diff(body: str, workdir: Path) -> None:
     """Compare an issue attachment with ``dump/`` and write the results.
 
-    Always writes ``code.txt``, ``diff.txt`` and ``error.txt`` in *workdir*, so
-    a bad attachment becomes a comment instead of a failed job.
+    Always writes ``code.txt``, ``diff.txt``, ``error.txt`` and ``summary.txt``
+    in *workdir*, so a bad attachment becomes a comment instead of a failed
+    job.
     """
     workdir.mkdir(parents=True, exist_ok=True)
     diff_path = workdir / "diff.txt"
     error_path = workdir / "error.txt"
+    summary_path = workdir / "summary.txt"
     diff_path.write_text("")
+    summary_path.write_text("")
     url = find_attachment_url(body)
     if url is None:
         error_path.write_text("Kein Anhang gefunden.")
@@ -223,7 +278,7 @@ def parse_diff(body: str, workdir: Path) -> None:
             error_path.write_text(f"Der Anhang konnte nicht geladen werden: {exc}")
             code = 2
         else:
-            code = diff_against_dump(apkg, diff_path, error_path)
+            code = diff_against_dump(apkg, diff_path, error_path, summary_path)
     (workdir / "code.txt").write_text(f"{code}\n")
 
 
@@ -244,12 +299,19 @@ def artifact_url(repo: str, run_id: str, name: str) -> str | None:
     return f"https://github.com/{repo}/actions/runs/{run_id}/artifacts/{ids[0]}"
 
 
-def post(code: int, diff: str, error: str, issue: int, repo: str, run_id: str) -> None:
+def post(
+    code: int, diff: str, error: str, summary: str, issue: int, repo: str, run_id: str
+) -> None:
     """Post the comparison result, linking the full diff when truncated."""
     full_url = None
     if code == 1 and len(diff) > DIFF_LIMIT:
         full_url = artifact_url(repo, run_id, "deck-diff")
-    _upsert_comment(repo, issue, MARKER, render_comment(code, diff, error, full_url))
+    _upsert_comment(
+        repo,
+        issue,
+        MARKER,
+        render_comment(code, diff, error, full_url, summary=summary),
+    )
 
 
 def render_apply_result(
@@ -407,8 +469,9 @@ def parse_apply(body: str, workdir: Path, issue: int) -> bool:
     result = run(["anki-tools", "diff", "dump", str(dump), "-f", "markdown"])
     if result.returncode == 2:
         raise IssueError(result.stderr.strip() or "anki-tools diff failed")
+    summary = _summary_table(dump) if result.returncode == 1 else ""
     (workdir / "pr-body.md").write_text(
-        render_pr_body(issue, _relabel_diff(result.stdout))
+        render_pr_body(issue, _relabel_diff(result.stdout), summary)
     )
     return result.returncode == 1
 
@@ -466,7 +529,12 @@ def _cmd_normalize(args: argparse.Namespace) -> int:
 def _cmd_comment(args: argparse.Namespace) -> int:
     """Print the issue comment body."""
     print(
-        render_comment(args.code, args.diff.read_text(), args.error.read_text()),
+        render_comment(
+            args.code,
+            args.diff.read_text(),
+            args.error.read_text(),
+            summary=args.summary.read_text(),
+        ),
         end="",
     )
     return 0
@@ -474,7 +542,8 @@ def _cmd_comment(args: argparse.Namespace) -> int:
 
 def _cmd_pr_body(args: argparse.Namespace) -> int:
     """Print the pull request body."""
-    print(render_pr_body(args.issue, args.diff.read_text()), end="")
+    summary = args.summary.read_text() if args.summary is not None else ""
+    print(render_pr_body(args.issue, args.diff.read_text(), summary), end="")
     return 0
 
 
@@ -502,6 +571,7 @@ def _cmd_post(args: argparse.Namespace) -> int:
         args.code,
         args.diff.read_text(),
         args.error.read_text(),
+        args.summary.read_text(),
         args.issue,
         args.repo,
         args.run_id,
@@ -558,11 +628,13 @@ def _build_parser() -> argparse.ArgumentParser:
     comment.add_argument("code", type=int)
     comment.add_argument("diff", type=Path)
     comment.add_argument("error", type=Path)
+    comment.add_argument("summary", type=Path)
     comment.set_defaults(func=_cmd_comment)
 
     pr_body = subparsers.add_parser("pr-body", help="print the pull request body")
     pr_body.add_argument("issue", type=int)
     pr_body.add_argument("diff", type=Path)
+    pr_body.add_argument("summary", type=Path, nargs="?", default=None)
     pr_body.set_defaults(func=_cmd_pr_body)
 
     commit_message = subparsers.add_parser(
@@ -592,6 +664,7 @@ def _build_parser() -> argparse.ArgumentParser:
     post.add_argument("code", type=int)
     post.add_argument("diff", type=Path)
     post.add_argument("error", type=Path)
+    post.add_argument("summary", type=Path)
     post.add_argument("issue", type=int)
     post.add_argument("repo")
     post.add_argument("run_id")

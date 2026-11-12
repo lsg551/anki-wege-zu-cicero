@@ -25,12 +25,17 @@ def _fake_fetch_apkg(url: str, dest: Path) -> None:
 
 
 def _patch_diff(
-    monkeypatch: pytest.MonkeyPatch, code: int, out: str = "", err: str = ""
+    monkeypatch: pytest.MonkeyPatch,
+    code: int,
+    out: str = "",
+    err: str = "",
+    summary: str = "",
 ) -> None:
-    def fake(apkg: Path, diff: Path, error: Path) -> int:
+    def fake(apkg: Path, diff: Path, error: Path, table: Path) -> int:
         del apkg
         diff.write_text(out)
         error.write_text(err)
+        table.write_text(summary)
         return code
 
     monkeypatch.setattr(issue_deck, "diff_against_dump", fake)
@@ -41,13 +46,15 @@ def _patch_run(
     diff_code: int,
     diff_out: str = "",
     fail: str | None = None,
+    summary_out: str = "",
 ) -> None:
     def fake(command: list[str]) -> subprocess.CompletedProcess[str]:
         sub = command[1]
         if sub == fail:
             return subprocess.CompletedProcess(command, 1, "", "boom")
         if sub == "diff":
-            return subprocess.CompletedProcess(command, diff_code, diff_out, "")
+            out = summary_out if "--summary" in command else diff_out
+            return subprocess.CompletedProcess(command, diff_code, out, "")
         return subprocess.CompletedProcess(command, 0, "", "")
 
     monkeypatch.setattr(issue_deck, "run", fake)
@@ -154,18 +161,36 @@ def test_diff_against_dump_writes_output(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     def fake_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "--summary" in command:
+            return subprocess.CompletedProcess(command, 1, "| section |\n", "")
         out = "--- dump\n+++ /tmp/issue.apkg\n@@ -1 +1 @@\n-a\n+b\n"
         return subprocess.CompletedProcess(command, 1, out, "err")
 
     monkeypatch.setattr(issue_deck, "run", fake_run)
     diff = tmp_path / "diff.txt"
     error = tmp_path / "error.txt"
-    code = issue_deck.diff_against_dump(tmp_path / "x.apkg", diff, error)
+    summary = tmp_path / "summary.txt"
+    code = issue_deck.diff_against_dump(tmp_path / "x.apkg", diff, error, summary)
     assert code == 1
     assert "--- Repository" in diff.read_text()
     assert "+++ Vorschlag" in diff.read_text()
     assert "/tmp/issue.apkg" not in diff.read_text()
     assert error.read_text() == "err"
+    assert summary.read_text() == "| section |\n"
+
+
+def test_diff_against_dump_writes_no_summary_when_equal(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def fake_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(command, 0, "", "")
+
+    monkeypatch.setattr(issue_deck, "run", fake_run)
+    summary = tmp_path / "summary.txt"
+    issue_deck.diff_against_dump(
+        tmp_path / "x.apkg", tmp_path / "d", tmp_path / "e", summary
+    )
+    assert summary.read_text() == ""
 
 
 def test_relabel_diff_plain() -> None:
@@ -202,6 +227,17 @@ def test_render_comment_diff() -> None:
     assert "+y" in body
 
 
+def test_render_comment_notes_then_table() -> None:
+    body = issue_deck.render_comment(
+        1, "-x\n+y\n", "anki-tools: error: boom", summary="| section |\n"
+    )
+    assert "> [!WARNING]" in body
+    assert "- error: boom" in body
+    assert "anki-tools: error:" not in body
+    assert "| section |" in body
+    assert body.index("boom") < body.index("| section |")
+
+
 def test_render_comment_truncates_with_link_outside_details() -> None:
     body = issue_deck.render_comment(
         1, "x" * (issue_deck.DIFF_LIMIT + 10), "", "https://example/full"
@@ -234,6 +270,12 @@ def test_render_pr_body() -> None:
     body = issue_deck.render_pr_body(7, "```diff\n+x\n```\n")
     assert "Closes #7" in body
     assert "+x" in body
+
+
+def test_render_pr_body_includes_the_summary() -> None:
+    body = issue_deck.render_pr_body(7, "```diff\n+x\n```\n", "| section |\n")
+    assert "Closes #7" in body
+    assert "| section |" in body
 
 
 def test_render_pr_body_truncates() -> None:
@@ -335,7 +377,7 @@ def test_artifact_url_missing(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_post_links_full_diff(monkeypatch: pytest.MonkeyPatch) -> None:
     captured: dict[str, str] = {}
     _patch_gh(monkeypatch, artifact="42", capture=captured)
-    issue_deck.post(1, "x" * (issue_deck.DIFF_LIMIT + 1), "", 7, "o/r", "9")
+    issue_deck.post(1, "x" * (issue_deck.DIFF_LIMIT + 1), "", "", 7, "o/r", "9")
     assert "https://github.com/o/r/actions/runs/9/artifacts/42" in captured["body"]
 
 
@@ -351,7 +393,7 @@ def test_post_short_diff_skips_artifact_lookup(
         return subprocess.CompletedProcess(command, 0, "https://example/comment", "")
 
     monkeypatch.setattr(issue_deck, "run", fake)
-    issue_deck.post(1, "-x\n+y\n", "", 7, "o/r", "9")
+    issue_deck.post(1, "-x\n+y\n", "", "", 7, "o/r", "9")
     assert not any("/artifacts" in call for call in calls)
 
 
@@ -365,7 +407,7 @@ def test_post_updates_existing_comment(monkeypatch: pytest.MonkeyPatch) -> None:
         return subprocess.CompletedProcess(command, 0, "https://example/comment", "")
 
     monkeypatch.setattr(issue_deck, "run", fake)
-    issue_deck.post(2, "", "boom", 7, "o/r", "9")
+    issue_deck.post(2, "", "boom", "", 7, "o/r", "9")
     assert any("PATCH" in call and "/comments/456" in call for call in calls)
 
 
@@ -484,12 +526,16 @@ def test_parse_diff_tool_error(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
 
 def test_parse_apply_changed(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(issue_deck, "fetch_attachment", _fake_fetch_apkg)
-    _patch_run(monkeypatch, diff_code=1, diff_out="```diff\n+x\n```\n")
+    _patch_run(
+        monkeypatch, diff_code=1, diff_out="```diff\n+x\n```\n", summary_out="| s |\n"
+    )
     changed = issue_deck.parse_apply(
         "https://github.com/user-attachments/x", tmp_path, 7
     )
     assert changed is True
-    assert "Closes #7" in (tmp_path / "pr-body.md").read_text()
+    body = (tmp_path / "pr-body.md").read_text()
+    assert "Closes #7" in body
+    assert "| s |" in body
 
 
 def test_parse_apply_unchanged(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -568,9 +614,11 @@ def test_cli_ack(capsys: pytest.CaptureFixture[str]) -> None:
 def test_cli_comment(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     diff = tmp_path / "diff.txt"
     error = tmp_path / "error.txt"
+    summary = tmp_path / "summary.txt"
     diff.write_text("")
     error.write_text("")
-    assert issue_deck.main(["comment", "0", str(diff), str(error)]) == 0
+    summary.write_text("")
+    assert issue_deck.main(["comment", "0", str(diff), str(error), str(summary)]) == 0
     assert "inhaltsgleich" in capsys.readouterr().out
 
 
@@ -625,9 +673,12 @@ def test_cli_post(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     _patch_gh(monkeypatch)
     diff = tmp_path / "diff.txt"
     error = tmp_path / "error.txt"
+    summary = tmp_path / "summary.txt"
     diff.write_text("")
     error.write_text("")
-    assert issue_deck.main(["post", "0", str(diff), str(error), "7", "o/r", "9"]) == 0
+    summary.write_text("")
+    args = ["post", "0", str(diff), str(error), str(summary), "7", "o/r", "9"]
+    assert issue_deck.main(args) == 0
 
 
 def test_cli_report_apply(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
