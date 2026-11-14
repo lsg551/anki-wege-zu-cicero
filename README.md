@@ -68,8 +68,8 @@ Vokabelberzeichnis).
 
 - [x] I. Lectio Prima
 - [x] II. Lectio Secunda
-- [ ] III. Lectio Tertia (enthalten, noch nicht migriert)
-- [ ] IV. Lectio Quarta (enthalten, noch nicht migriert)
+- [x] III. Lectio Tertia
+- [x] IV. Lectio Quarta
 - [ ] V. Lectio Quinta (enthalten, noch nicht migriert)
 - [ ] VI. Lectio Sexta (enthalten, noch nicht migriert)
 - [ ] VII. Lectio Septima (enthalten, noch nicht migriert)
