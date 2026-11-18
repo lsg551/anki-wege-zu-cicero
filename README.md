@@ -195,10 +195,11 @@ Von diesem System wird aktiv Gebrauch gemacht:
 
 ## Bekannte Probleme
 
-- Die native Anki-Suchfunktion unterscheidet zwischen Symbolen mit und ohne
-  Diakritika. D.h. <tt>a</tt> und <tt>ā</tt> sind zwei distinkte Zeichen. Beim
-  Suchen kann dies kontraintuitiv sein, wenn <tt>advoco</tt> <tt>advocō</tt>
-  nicht findet.
+- Die Anki-Suchfunktion unterscheidet *standardmäßig* nicht zwischen Symbolen
+  mit und ohne Diakritika. D.h. <tt>a</tt> und <tt>ā</tt> sind zwei distinkte
+  Zeichen. Mit Ankis
+  [`nc:<term>`](https://docs.ankiweb.net/manual/searching#ignoring-accents/combining-characters)
+  kann man dies umgehen, dann findet `nx:rex` auch <tt>rēx</tt>.
 - Nicht alle Änderungen werden bei einem erneuten Export übernomen. Siehe
   [*Upgrade auf neuere Version*](#upgrade-auf-neuere-version).
 
