@@ -199,7 +199,7 @@ Von diesem System wird aktiv Gebrauch gemacht:
   mit und ohne Diakritika. D.h. <tt>a</tt> und <tt>ā</tt> sind zwei distinkte
   Zeichen. Mit Ankis
   [`nc:<term>`](https://docs.ankiweb.net/manual/searching#ignoring-accents/combining-characters)
-  kann man dies umgehen, dann findet `nx:rex` auch <tt>rēx</tt>.
+  kann man dies umgehen, dann findet `nc:rex` auch <tt>rēx</tt>.
 - Nicht alle Änderungen werden bei einem erneuten Export übernomen. Siehe
   [*Upgrade auf neuere Version*](#upgrade-auf-neuere-version).
 
